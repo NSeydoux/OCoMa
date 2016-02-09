@@ -1,0 +1,22 @@
+Sénarios d'utilisation
+
+- Ajouter une entité
+	- Album
+		- En "électron libre"
+		- Directement dans une collection
+		- Directement sous un auteur
+		- Directement dans une série
+	- Auteur
+	- Série
+		- Directement sous un auteur
+	- Liste (collection, prêts, wishlist...)
+- Transférer une entité d'une liste à une autre
+	- Prêter un album, le passer de wishlist à collection...
+- Supprimer une entité
+- Modifier une entité enregistrée 
+	- Importer des informations depuis internet
+- Exporter des information
+	- Liste
+
+
+
