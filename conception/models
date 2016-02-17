@@ -1,9 +1,12 @@
-Sérialisations de données
+Data serialazation
 
-Basé sur la ComicBookOntology
+Based on te ComicBookOntology (https://github.com/comicmeta/ComicBookOntology)
 
+When entering an entity in the system, propose predifined infoboxes _and_ the 
+possibility to use properties from the ontology to define relationships with
+other entities, not necessarily planned a priori
+--
 À la saisie d'une entité, proposer des cases prédéfinies _et_ la possibilité
 d'utiliser des relations de l'ontologie avec d'autres entités pas forcément
 prévues au préalable
-
 
