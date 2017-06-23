@@ -1,6 +1,5 @@
 package fr.ocoma.endpoint;
 
-import java.io.IOException;
 import java.net.URI;
 
 import org.apache.logging.log4j.LogManager;
@@ -8,8 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-
-import fr.ocoma.endpoint.resources.FrontendEndpoint;
 
 public class RESTServer extends Thread {
 	
