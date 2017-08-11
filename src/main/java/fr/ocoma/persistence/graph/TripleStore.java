@@ -19,7 +19,7 @@ public class TripleStore {
 		dataset = TDBFactory.assembleDataset(assemblerFilePath);
 	}
 	
-	public TripleStore getInstance(){
+	public static TripleStore getInstance(){
 		if(TripleStore.instance == null){
 			TripleStore.instance = new TripleStore(Controler.getInstance().getConfiguration().getTripleStoreDescFile());
 		}

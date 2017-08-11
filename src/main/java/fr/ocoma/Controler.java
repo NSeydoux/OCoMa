@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.ocoma.config.Configuration;
 import fr.ocoma.endpoint.RESTServer;
+import fr.ocoma.persistence.graph.KnowledgeBase;
 
 public class Controler {
 	
@@ -19,6 +20,7 @@ public class Controler {
 	
 	private static Controler instance;
 	private Configuration config;
+	private KnowledgeBase kb;
 	
 	private Controler(File configFile){
 		ObjectMapper mapper = new ObjectMapper();
@@ -38,8 +40,9 @@ public class Controler {
         }
 	}
 	
-	public Controler buildInstance(File configFile){
+	public static Controler buildInstance(File configFile){
 		Controler.instance = new Controler(configFile);
+		Controler.instance.kb = new KnowledgeBase();
 		return Controler.instance;
 	}
 	
@@ -53,6 +56,15 @@ public class Controler {
 	
 	public static void main(String[] args) {
 		LOGGER.info("Exécution du main !");
-		RESTServer.getInstance().run();
+		if(args[0] != null){
+			Controler.buildInstance(new File(args[0]));
+			RESTServer.getInstance().run();
+		} else {
+			LOGGER.fatal("Usage : mvn exec:java -Dconfig=<config file path>");
+		}
+	}
+
+	public KnowledgeBase getKb() {
+		return kb;
 	}
 }

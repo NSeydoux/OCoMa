@@ -40,7 +40,7 @@
 						</systemProperty>
 					</systemProperties>
 					<arguments>
-						<!-- argument>${argument_name}</argument -->
+						<argument>${config}</argument>
 					</arguments>
 				</configuration>
 			</plugin>
