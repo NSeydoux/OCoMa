@@ -47,16 +47,16 @@
 		</plugins>
 	</build>
 	<dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.glassfish.jersey</groupId>
-                <artifactId>jersey-bom</artifactId>
-                <version>${jersey.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.glassfish.jersey</groupId>
+				<artifactId>jersey-bom</artifactId>
+				<version>${jersey.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<!-- uncomment this to get JSON support <dependency> <groupId>org.glassfish.jersey.media</groupId> 
@@ -73,6 +73,13 @@
 			<artifactId>javax.json</artifactId>
 			<version>1.0.4</version>
 			<type>jar</type>
+		</dependency>
+
+		<!-- JSON serializer -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.6.3</version>
 		</dependency>
 
 		<!-- HTTP client and server -->
@@ -96,6 +103,44 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
 			<version>2.8</version>
+		</dependency>
+
+		<!-- Semantic web -->
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-tdb</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-core</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-base</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-arq</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<!-- Custom dependencies -->
+		<dependency>
+			<groupId>fr.irit.ontology-tools</groupId>
+			<artifactId>sandbox</artifactId>
+			<version>0.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/semantic-sandbox-0.1.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>fr.irit.melodi.semantic-web</groupId>
+			<artifactId>sparql-lib</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/sparql-lib-1.0.jar</systemPath>
 		</dependency>
 	</dependencies>
 
