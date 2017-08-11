@@ -1,4 +1,4 @@
-package fr.ocoma.endpoint.resources;
+package fr.ocoma.in.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

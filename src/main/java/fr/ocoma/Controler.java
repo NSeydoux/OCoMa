@@ -11,12 +11,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.ocoma.config.Configuration;
-import fr.ocoma.endpoint.RESTServer;
+import fr.ocoma.in.server.RESTServer;
 import fr.ocoma.persistence.graph.KnowledgeBase;
 
 public class Controler {
 	
 	private static final Logger LOGGER = LogManager.getLogger(Controler.class);
+	private static final String appName = "ocoma";
 	
 	private static Controler instance;
 	private Configuration config;
@@ -63,7 +64,8 @@ public class Controler {
 		LOGGER.info("Exécution du main !");
 		if(args[0] != null){
 			Controler.buildInstance(new File(args[0]));
-			RESTServer.getInstance().run();
+			RESTServer rs = new RESTServer(Controler.getInstance().config.getUrl(), Controler.appName, Controler.getInstance().config.getPort());
+			rs.run();
 		} else {
 			LOGGER.fatal("Usage : mvn exec:java -Dconfig=<config file path>");
 		}

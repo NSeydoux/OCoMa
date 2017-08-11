@@ -3,7 +3,7 @@ package fr.ocoma.persistence.graph;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import fr.ocoma.Controler;
+import fr.ocoma.model.Comic;
 import fr.ocoma.model.Entity;
 import fr.ocoma.persistence.IPersistence;
 
@@ -23,6 +23,9 @@ public class KnowledgeBase implements IPersistence {
 	@Override
 	public void saveEntity(Entity e) {
 		LOGGER.trace("saved entity class : "+e.getClass());
+		if(e.getClass() == Comic.class){
+			
+		}
 	}
 
 }

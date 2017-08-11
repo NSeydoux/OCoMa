@@ -1,3 +1,5 @@
 {
-	"tripleStoreDescFile":"conf/dataset.ttl"
+	"tripleStoreDescFile":"conf/dataset.ttl",
+	"url":"http://localhost",
+	"port":4567
 }
