@@ -54,6 +54,11 @@ public class Controler {
 		return this.config;
 	}
 	
+
+	public KnowledgeBase getKb() {
+		return kb;
+	}
+	
 	public static void main(String[] args) {
 		LOGGER.info("Exécution du main !");
 		if(args[0] != null){
@@ -62,9 +67,5 @@ public class Controler {
 		} else {
 			LOGGER.fatal("Usage : mvn exec:java -Dconfig=<config file path>");
 		}
-	}
-
-	public KnowledgeBase getKb() {
-		return kb;
 	}
 }
