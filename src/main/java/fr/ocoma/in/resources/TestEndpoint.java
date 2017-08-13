@@ -26,6 +26,8 @@ public class TestEndpoint {
 		Comic b = new Comic("http://example.com/ns#testComic");
 		b.setTitle("Le Schtroumpf test");
 		b.setEdited(true);
+		b.getAuthors().add("Un auteur");
+		b.getAuthors().add("Un autre auteur");
 		Controler.getInstance().getKb().saveEntity(b);
 		return  Response.status(HttpURLConnection.HTTP_OK)
                 .entity("Entity saved").build();

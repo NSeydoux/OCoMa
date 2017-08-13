@@ -1,5 +1,7 @@
 package fr.ocoma.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import fr.ocoma.model.annotations.DataProperty;
@@ -13,11 +15,12 @@ public class Comic extends Entity {
 	private String title;
 	@DataProperty("http://example.com/ns#published")
 	private Boolean edited;
-//	@ObjectProperty("http://comicmeta.org/cbo/creator")
-//	private Map<String, String> authors;
+	@DataProperty("http://comicmeta.org/cbo/creator")
+	private List<String> authors;
 	
 	public Comic(String uri) {
 		super(uri);
+		this.authors = new ArrayList<>();
 	}
 
 	public String getTitle() {
@@ -36,13 +39,13 @@ public class Comic extends Entity {
 		this.edited = edited;
 	}
 
-//	public Map<String, String> getAuthors() {
-//		return authors;
-//	}
-//
-//	public void setAuthors(Map<String, String> authors) {
-//		this.authors = authors;
-//	}
+	public List<String> getAuthors() {
+		return authors;
+	}
+
+	public void setAuthors(List<String> authors) {
+		this.authors = authors;
+	}
 	
 	
 

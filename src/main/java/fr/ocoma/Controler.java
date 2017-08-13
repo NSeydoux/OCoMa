@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.ocoma.config.Configuration;
 import fr.ocoma.in.server.RESTServer;
-import fr.ocoma.persistence.graph.KnowledgeBase;
+import fr.ocoma.persistence.graph.ObjectGraphMapper;
 
 public class Controler {
 	
@@ -21,7 +21,7 @@ public class Controler {
 	
 	private static Controler instance;
 	private Configuration config;
-	private KnowledgeBase kb;
+	private ObjectGraphMapper kb;
 	
 	private Controler(File configFile){
 		ObjectMapper mapper = new ObjectMapper();
@@ -43,7 +43,7 @@ public class Controler {
 	
 	public static Controler buildInstance(File configFile){
 		Controler.instance = new Controler(configFile);
-		Controler.instance.kb = new KnowledgeBase();
+		Controler.instance.kb = new ObjectGraphMapper();
 		return Controler.instance;
 	}
 	
@@ -56,7 +56,7 @@ public class Controler {
 	}
 	
 
-	public KnowledgeBase getKb() {
+	public ObjectGraphMapper getKb() {
 		return kb;
 	}
 	
