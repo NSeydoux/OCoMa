@@ -24,6 +24,8 @@ public class TestEndpoint {
 	@Path("/save")
 	public Response saveEntity(){
 		Comic b = new Comic("http://example.com/ns#testComic");
+		b.setTitle("Le Schtroumpf test");
+		b.setEdited(true);
 		Controler.getInstance().getKb().saveEntity(b);
 		return  Response.status(HttpURLConnection.HTTP_OK)
                 .entity("Entity saved").build();
