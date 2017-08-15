@@ -26,6 +26,13 @@ public class TripleStore {
 		return TripleStore.instance;
 	}
 	
+	public Model getModel(){
+		this.dataset.begin(ReadWrite.READ) ;
+		Model m = this.dataset.getDefaultModel();
+		this.dataset.end();
+		return m;
+	}
+	
 	public ResultSet selectQuery(String query){
 		this.dataset.begin(ReadWrite.READ) ;
 		ResultSet rs = null;

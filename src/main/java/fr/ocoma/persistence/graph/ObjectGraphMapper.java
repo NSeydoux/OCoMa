@@ -4,8 +4,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -24,6 +27,7 @@ public class ObjectGraphMapper implements IPersistence {
 	private static final Logger LOGGER = LogManager.getLogger(ObjectGraphMapper.class);
 	private static List<Class<?>> supportedAtomicTypes;
 	private static List<Class<?>> supportedComposedTypes;
+	private static Set<Entry<String, String>> prefixes;
 	
 	static {
 		ObjectGraphMapper.supportedAtomicTypes = new ArrayList<>();
@@ -35,6 +39,9 @@ public class ObjectGraphMapper implements IPersistence {
 		ObjectGraphMapper.supportedComposedTypes = new ArrayList<>();
 		ObjectGraphMapper.supportedComposedTypes.add(List.class);
 		ObjectGraphMapper.supportedComposedTypes.add(Set.class);
+		
+		ObjectGraphMapper.prefixes = new HashSet<>();
+		ObjectGraphMapper.prefixes.add(new AbstractMap.SimpleEntry<String, String>("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#"));
 	}
 	
 	public ObjectGraphMapper() {
@@ -59,10 +66,8 @@ public class ObjectGraphMapper implements IPersistence {
 			for(Field f : e.getClass().getDeclaredFields()){
 				LOGGER.trace("Processing the "+f.getName()+" field");
 				if(f.getAnnotation(DataProperty.class) != null){
-					LOGGER.trace("It is a data property");
 					insert += serializeDataProperty(e, f);
 				} else if(f.getAnnotation(ObjectProperty.class) != null){
-					LOGGER.trace("It is an object property");
 					insert += serializeObjectProperty(e, f);
 				} else {
 					LOGGER.trace("It is an unannotated field");
@@ -70,7 +75,9 @@ public class ObjectGraphMapper implements IPersistence {
 						LOGGER.trace(a.toString());
 					}
 				}
-				LOGGER.debug(insert);
+				LOGGER.trace(insert);
+				SparqlInsertData sid = new SparqlInsertData(ObjectGraphMapper.prefixes, insert);
+				TripleStore.getInstance().updateQuery(sid.toString());
 			}
 		} else {
 			LOGGER.fatal("Cannot persist entity "+e.getUri()+", its type has no class annotation");

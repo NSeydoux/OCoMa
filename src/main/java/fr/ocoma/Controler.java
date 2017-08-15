@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.ocoma.config.Configuration;
 import fr.ocoma.in.server.RESTServer;
+import fr.ocoma.model.Comic;
 import fr.ocoma.persistence.graph.ObjectGraphMapper;
 
 public class Controler {
