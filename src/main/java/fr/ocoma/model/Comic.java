@@ -2,7 +2,6 @@ package fr.ocoma.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import fr.ocoma.model.annotations.DataProperty;
 import fr.ocoma.model.annotations.ObjectProperty;
@@ -15,7 +14,7 @@ public class Comic extends Entity {
 	private String title;
 	@DataProperty("http://example.com/ns#published")
 	private Boolean edited;
-	@DataProperty("http://comicmeta.org/cbo/creator")
+	@ObjectProperty("http://comicmeta.org/cbo/creator")
 	private List<String> authors;
 	
 	public Comic(String uri) {

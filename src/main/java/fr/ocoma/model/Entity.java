@@ -10,4 +10,9 @@ public class Entity {
 	public String getUri() {
 		return uri;
 	}
+	
+	@Override
+	public String toString() {
+		return this.uri;
+	}
 }
