@@ -41,7 +41,6 @@ public class ObjectGraphMapper implements IPersistence {
 		ObjectGraphMapper.supportedComposedTypes.add(Set.class);
 		
 		ObjectGraphMapper.prefixes = new HashSet<>();
-		ObjectGraphMapper.prefixes.add(new AbstractMap.SimpleEntry<String, String>("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#"));
 	}
 	
 	public ObjectGraphMapper() {
@@ -62,7 +61,7 @@ public class ObjectGraphMapper implements IPersistence {
 		}
 		if(e.getClass().getAnnotation(OwlClass.class) != null){
 			OwlClass classAnnotation = e.getClass().getAnnotation(OwlClass.class);
-			String insert = e.getUri()+" rdf:type "+classAnnotation.value()+".";
+			String insert = "<"+e.getUri()+"> rdf:type <"+classAnnotation.value()+">.";
 			for(Field f : e.getClass().getDeclaredFields()){
 				LOGGER.trace("Processing the "+f.getName()+" field");
 				if(f.getAnnotation(DataProperty.class) != null){
@@ -75,8 +74,8 @@ public class ObjectGraphMapper implements IPersistence {
 						LOGGER.trace(a.toString());
 					}
 				}
-				LOGGER.trace(insert);
 				SparqlInsertData sid = new SparqlInsertData(ObjectGraphMapper.prefixes, insert);
+				LOGGER.trace(sid.toString());
 				TripleStore.getInstance().updateQuery(sid.toString());
 			}
 		} else {
@@ -93,13 +92,13 @@ public class ObjectGraphMapper implements IPersistence {
 				if(composedClass.isAssignableFrom(f.getType())){
 					// The type is a supported composed type
 					fieldTypeSupported = true;
-					newTriple = this.retrieveComposedSimpleDataTriple(e.getUri(), dataProperty.value(), e, f);
+					newTriple = this.retrieveComposedSimpleDataTriple("<"+e.getUri()+">", "<"+dataProperty.value()+">", e, f);
 				}
 			}
 			if(!fieldTypeSupported && ObjectGraphMapper.supportedAtomicTypes.contains(f.getType())){
 				// The type is a supported atomic type
 				fieldTypeSupported = true;
-				newTriple = this.retrieveUniqueSimpleDataTriple(e.getUri(), dataProperty.value(), e, f);
+				newTriple = this.retrieveUniqueSimpleDataTriple("<"+e.getUri()+">", "<"+dataProperty.value()+">", e, f);
 			}
 			if(!fieldTypeSupported){
 				throw new FieldTypeNotSupportedException(f.getType().toString());
@@ -121,13 +120,13 @@ public class ObjectGraphMapper implements IPersistence {
 				if(composedClass.isAssignableFrom(f.getType())){
 					// The type is a supported composed type
 					fieldTypeSupported = true;
-					newTriple = this.retrieveComposedSimpleObjectTriple(e.getUri(), objectProperty.value(), e, f);
+					newTriple = this.retrieveComposedSimpleObjectTriple("<"+e.getUri()+">", "<"+objectProperty.value()+">", e, f);
 				}
 			}
 			if(!fieldTypeSupported && (f.getType().equals(String.class) || Entity.class.isAssignableFrom(f.getType()))){
 				// The type is a supported atomic type
 				fieldTypeSupported = true;
-				newTriple = this.retrieveUniqueSimpleObjectTriple(e.getUri(), objectProperty.value(), e, f);
+				newTriple = this.retrieveUniqueSimpleObjectTriple("<"+e.getUri()+">", "<"+objectProperty.value()+">", e, f);
 			}
 			if(!fieldTypeSupported){
 				throw new FieldTypeNotSupportedException(f.getType().toString());

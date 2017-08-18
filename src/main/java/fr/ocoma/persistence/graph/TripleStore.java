@@ -46,7 +46,7 @@ public class TripleStore {
 	
 	public void updateQuery(String query){
 		this.dataset.begin(ReadWrite.WRITE) ;
-		try(QueryExecution qExec = QueryExecutionFactory.create(query, this.dataset)) {
+		try {
 			UpdateAction.parseExecute(query, this.dataset);
 			this.dataset.commit();
 		} finally {

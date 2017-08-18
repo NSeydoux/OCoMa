@@ -42,12 +42,17 @@ public class TestEndpoint {
 	@POST
 	@Path("/save")
 	public Response saveEntity(){
-		Comic b = new Comic("http://example.com/ns#testComic");
-		b.setTitle("Le Schtroumpf test");
-		b.setEdited(true);
-		b.getAuthors().add("http://example.com/ns#unAuteur");
-		b.getAuthors().add("http://example.com/ns#unAutreAuteur");
-		Controler.getInstance().getKb().saveEntity(b);
+		try{
+			Comic b = new Comic("http://example.com/ns#testComic");
+			b.setTitle("Le Schtroumpf test");
+			b.setEdited(true);
+			b.getAuthors().add("http://example.com/ns#unAuteur");
+			b.getAuthors().add("http://example.com/ns#unAutreAuteur");
+			Controler.getInstance().getKb().saveEntity(b);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		
 		return  Response.status(HttpURLConnection.HTTP_OK)
                 .entity("Entity saved").build();
 	}
