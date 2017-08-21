@@ -4,18 +4,24 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.jena.rdf.model.Model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import fr.irit.melodi.sparql.exceptions.IncompleteSubstitutionException;
+import fr.irit.melodi.sparql.exceptions.NotAFolderException;
+import fr.irit.melodi.sparql.files.FolderManager;
 import fr.irit.melodi.sparql.query.dataquery.insert.SparqlInsertData;
-import fr.ocoma.model.Comic;
+import fr.irit.tools.queries.QueryEngine;
+import fr.ocoma.config.OGMConfiguration;
 import fr.ocoma.model.Entity;
 import fr.ocoma.model.annotations.DataProperty;
 import fr.ocoma.model.annotations.ObjectProperty;
@@ -28,6 +34,8 @@ public class ObjectGraphMapper implements IPersistence {
 	private static List<Class<?>> supportedAtomicTypes;
 	private static List<Class<?>> supportedComposedTypes;
 	private static Set<Entry<String, String>> prefixes;
+	private FolderManager queries;
+	private OGMConfiguration config;
 	
 	static {
 		ObjectGraphMapper.supportedAtomicTypes = new ArrayList<>();
@@ -43,13 +51,49 @@ public class ObjectGraphMapper implements IPersistence {
 		ObjectGraphMapper.prefixes = new HashSet<>();
 	}
 	
-	public ObjectGraphMapper() {
+	public ObjectGraphMapper(OGMConfiguration config) {
+		this.config = config;
 		// Initializes the triplestore
 		TripleStore.getInstance();
+		try {
+			this.queries = new FolderManager("queries");
+			this.queries.loadQueries();
+		} catch (NotAFolderException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
 	public Entity getEntity(String uri) {
+		Map<String, String> substitution = new HashMap<>();
+		substitution.put("subject", uri);
+		Model uriDescription = TripleStore.getInstance().decribeQuery("DESCRIBE <"+uri+">");
+		try {
+			String classQuery = this.queries.getTemplateQueries().get("get_class").substitute(substitution);
+			String propertiesQuery = this.queries.getTemplateQueries().get("get_properties").substitute(substitution);
+			for(Map<String, String> result : QueryEngine.selectQuery(classQuery, uriDescription)){
+				
+			}
+		} catch (IncompleteSubstitutionException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public Class<?> getJavaClassFromOwlClass(String owlClass){
+		for(String className : this.config.getClasses()){
+			try {
+				Class<?> clazz = Class.forName(className);
+				if(clazz.getAnnotation(OwlClass.class) != null){
+					String annotatedOwlClass = clazz.getAnnotation(OwlClass.class).value();
+					if(annotatedOwlClass.equals(owlClass)){
+						return clazz;
+					}
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 		return null;
 	}
 

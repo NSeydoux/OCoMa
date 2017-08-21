@@ -1,5 +1,6 @@
 {
 	"tripleStoreDescFile":"conf/dataset.ttl",
 	"url":"http://localhost",
-	"port":4567
+	"port":4567,
+	"ogmConfig":"ogm.json"
 }

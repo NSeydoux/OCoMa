@@ -1,9 +1,10 @@
 package fr.ocoma.config;
 
-public class Configuration {
+public class OCoMaConfiguration {
 	private String tripleStoreDescFile;
 	private Integer port;
 	private String url;
+	private String ogmConfig;
 
 	public String getTripleStoreDescFile() {
 		return tripleStoreDescFile;
@@ -27,5 +28,13 @@ public class Configuration {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getOgmConfig() {
+		return ogmConfig;
+	}
+
+	public void setOgmConfig(String ogmConfig) {
+		this.ogmConfig = ogmConfig;
 	}
 }
