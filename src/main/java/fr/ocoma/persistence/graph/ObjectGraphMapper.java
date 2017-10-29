@@ -28,6 +28,7 @@ import fr.ocoma.model.annotations.ObjectProperty;
 import fr.ocoma.model.annotations.OwlClass;
 import fr.ocoma.persistence.IPersistence;
 import fr.ocoma.persistence.exceptions.FieldTypeNotSupportedException;
+import fr.ocoma.persistence.exceptions.NotEntityClassException;
 
 public class ObjectGraphMapper implements IPersistence {
 	private static final Logger LOGGER = LogManager.getLogger(ObjectGraphMapper.class);
@@ -71,7 +72,13 @@ public class ObjectGraphMapper implements IPersistence {
 		try {
 			String classQuery = this.queries.getTemplateQueries().get("get_class").substitute(substitution);
 			String propertiesQuery = this.queries.getTemplateQueries().get("get_properties").substitute(substitution);
+			Class<? extends Entity> clazz = null;
 			for(Map<String, String> result : QueryEngine.selectQuery(classQuery, uriDescription)){
+				try {
+					clazz = this.getJavaClassFromOwlClass(result.get("class"));
+				} catch (NotEntityClassException e) {
+					e.printStackTrace();
+				}
 				
 			}
 		} catch (IncompleteSubstitutionException e) {
@@ -80,10 +87,17 @@ public class ObjectGraphMapper implements IPersistence {
 		return null;
 	}
 	
-	public Class<?> getJavaClassFromOwlClass(String owlClass){
+	public Class<? extends Entity> getJavaClassFromOwlClass(String owlClass) throws NotEntityClassException{
 		for(String className : this.config.getClasses()){
 			try {
-				Class<?> clazz = Class.forName(className);
+				Class<?> rawClass = Class.forName(className);
+				Class<? extends Entity> clazz = null;
+				if(Entity.class.isAssignableFrom(rawClass)){
+					clazz = (Class<? extends Entity>) rawClass;
+				} else {
+					throw new NotEntityClassException(className);
+				}
+				 
 				if(clazz.getAnnotation(OwlClass.class) != null){
 					String annotatedOwlClass = clazz.getAnnotation(OwlClass.class).value();
 					if(annotatedOwlClass.equals(owlClass)){
@@ -96,6 +110,8 @@ public class ObjectGraphMapper implements IPersistence {
 		}
 		return null;
 	}
+	
+	
 
 	@Override
 	public void saveEntity(Entity e) {

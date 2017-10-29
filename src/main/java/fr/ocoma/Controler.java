@@ -10,9 +10,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import fr.ocoma.config.Configuration;
+import fr.ocoma.config.OCoMaConfiguration;
+import fr.ocoma.config.OGMConfiguration;
 import fr.ocoma.in.server.RESTServer;
-import fr.ocoma.model.Comic;
 import fr.ocoma.persistence.graph.ObjectGraphMapper;
 
 public class Controler {
@@ -21,14 +21,14 @@ public class Controler {
 	private static final String appName = "ocoma";
 	
 	private static Controler instance;
-	private Configuration config;
+	private OCoMaConfiguration config;
 	private ObjectGraphMapper kb;
 	
 	private Controler(File configFile){
 		ObjectMapper mapper = new ObjectMapper();
         if(configFile != null){
             try {
-                this.config = mapper.readValue(configFile, Configuration.class);
+                this.config = mapper.readValue(configFile, OCoMaConfiguration.class);
             } catch (JsonParseException ex) {
                 LOGGER.error("Parsing failed");
                 ex.printStackTrace();
@@ -44,7 +44,18 @@ public class Controler {
 	
 	public static Controler buildInstance(File configFile){
 		Controler.instance = new Controler(configFile);
-		Controler.instance.kb = new ObjectGraphMapper();
+		ObjectMapper mapper = new ObjectMapper();
+		OGMConfiguration ogmConf;
+		try {
+			ogmConf = mapper.readValue(new File(Controler.instance.getConfiguration().getOgmConfig()), OGMConfiguration.class);
+			Controler.instance.kb = new ObjectGraphMapper(ogmConf);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return Controler.instance;
 	}
 	
@@ -52,7 +63,7 @@ public class Controler {
 		return Controler.instance;
 	}	
 	
-	public Configuration getConfiguration(){
+	public OCoMaConfiguration getConfiguration(){
 		return this.config;
 	}
 	
