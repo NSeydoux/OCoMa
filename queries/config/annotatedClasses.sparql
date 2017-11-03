@@ -1,0 +1,7 @@
+PREFIX ogm:<http://w3id.og/ogm#>
+
+SELECT ?class
+WHERE {
+	?config a ogm:OGMConfiguration;
+		ogm:hasAnnotatedClass ?class.
+}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn" strict="true" name="XMLConfigTest" packages="org.apache.logging.log4j.test">
     <Properties>
-        <Property name="filename">swip.log</Property>
+        <Property name="filename">ocoma.log</Property>
     </Properties>
     <Filter type="ThresholdFilter" level="trace"/>
 

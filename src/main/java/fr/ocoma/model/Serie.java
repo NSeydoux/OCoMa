@@ -1,6 +1,8 @@
 package fr.ocoma.model;
 
-public class Serie extends Entity{
+import org.framagit.nseydoux.ogm.graph.Resource;
+
+public class Serie extends Resource{
 
 	private String title;
 	private Integer publishedElements;

@@ -138,9 +138,12 @@
 		<dependency>
 			<groupId>fr.irit.melodi.semantic-web</groupId>
 			<artifactId>sparql-lib</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/libs/sparql-lib-1.0.jar</systemPath>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.framagit.nseydoux</groupId>
+			<artifactId>ogm</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 

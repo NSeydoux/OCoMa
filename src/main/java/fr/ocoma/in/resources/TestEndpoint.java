@@ -14,8 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import fr.ocoma.Controler;
 import fr.ocoma.model.Comic;
-import fr.ocoma.persistence.graph.ObjectGraphMapper;
-import fr.ocoma.persistence.graph.TripleStore;
+import fr.ocoma.model.OCoMaModel;
 
 @Path("/test")
 public class TestEndpoint {
@@ -28,16 +27,16 @@ public class TestEndpoint {
                 .entity("pong").build();
 	}
 	
-	@GET
-	@Path("/kb")
-	public Response getKB(){
-		Model m = TripleStore.getInstance().getModel();
-		StringWriter sw = new StringWriter();
-		m.write(sw, "TTL");
-		LOGGER.debug(sw.toString());
-		return  Response.status(HttpURLConnection.HTTP_OK)
-                .entity(sw.toString()).build();
-	}
+//	@GET
+//	@Path("/kb")
+//	public Response getKB(){
+//		Model m = TripleStore.getInstance().getModel();
+//		StringWriter sw = new StringWriter();
+//		m.write(sw, "TTL");
+//		LOGGER.debug(sw.toString());
+//		return  Response.status(HttpURLConnection.HTTP_OK)
+//                .entity(sw.toString()).build();
+//	}
 	
 	@POST
 	@Path("/save")
@@ -48,11 +47,10 @@ public class TestEndpoint {
 			b.setEdited(true);
 			b.getAuthors().add("http://example.com/ns#unAuteur");
 			b.getAuthors().add("http://example.com/ns#unAutreAuteur");
-			Controler.getInstance().getKb().saveEntity(b);
+			OCoMaModel.getInstance().saveEntity(b);
 		} catch (Exception e){
 			e.printStackTrace();
-		}
-		
+		}	
 		return  Response.status(HttpURLConnection.HTTP_OK)
                 .entity("Entity saved").build();
 	}

@@ -3,12 +3,13 @@ package fr.ocoma.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.ocoma.model.annotations.DataProperty;
-import fr.ocoma.model.annotations.ObjectProperty;
-import fr.ocoma.model.annotations.OwlClass;
+import org.framagit.nseydoux.ogm.annotations.DataProperty;
+import org.framagit.nseydoux.ogm.annotations.ObjectProperty;
+import org.framagit.nseydoux.ogm.annotations.OwlClass;
+import org.framagit.nseydoux.ogm.graph.Resource;
 
 @OwlClass("http://comicmeta.org/cbo/Comic")
-public class Comic extends Entity {
+public class Comic extends Resource {
 
 	@DataProperty("http://purl.org/dc/terms/title")
 	private String title;

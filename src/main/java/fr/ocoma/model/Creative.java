@@ -1,6 +1,8 @@
 package fr.ocoma.model;
 
-public class Creative extends Entity {
+import org.framagit.nseydoux.ogm.graph.Resource;
+
+public class Creative extends Resource {
 
 	private String name;
 	
