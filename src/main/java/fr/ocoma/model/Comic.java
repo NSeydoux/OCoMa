@@ -15,12 +15,16 @@ public class Comic extends Resource {
 	private String title;
 	@DataProperty("http://example.com/ns#published")
 	private Boolean edited;
-	@ObjectProperty("http://comicmeta.org/cbo/creator")
-	private List<String> authors;
+//	@ObjectProperty("http://comicmeta.org/cbo/creator")
+//	private List<String> authors;
+	
+	public Comic(){
+		super();
+	}
 	
 	public Comic(String uri) {
 		super(uri);
-		this.authors = new ArrayList<>();
+//		this.authors = new ArrayList<>();
 	}
 
 	public String getTitle() {
@@ -39,14 +43,16 @@ public class Comic extends Resource {
 		this.edited = edited;
 	}
 
-	public List<String> getAuthors() {
-		return authors;
-	}
-
-	public void setAuthors(List<String> authors) {
-		this.authors = authors;
-	}
+//	public List<String> getAuthors() {
+//		return authors;
+//	}
+//
+//	public void setAuthors(List<String> authors) {
+//		this.authors = authors;
+//	}
 	
-	
+	public String toString(){
+		return this.title+", by ";//+this.authors.toString();
+	}
 
 }

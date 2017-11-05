@@ -1,5 +1,6 @@
 package fr.ocoma.model;
 
+import org.apache.jena.rdf.model.Model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.framagit.nseydoux.ogm.PersistenceEngine;
@@ -31,5 +32,12 @@ public class OCoMaModel {
 		return "";
 	}
 	
+	public Resource fetchEntity(String uri){
+		return persistence.getEntity(uri);
+	}
+	
+	public Model dumpModel(){
+		return this.persistence.dumpModel();
+	}
 	
 }
