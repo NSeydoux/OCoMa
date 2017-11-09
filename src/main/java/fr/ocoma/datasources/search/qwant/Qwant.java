@@ -24,12 +24,14 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
+import fr.ocoma.datasources.search.ISearchEngine;
+import fr.ocoma.datasources.search.ISearchResult;
 
-public class Qwant {
+
+public class Qwant implements ISearchEngine {
 	private static final Logger LOGGER = LogManager.getLogger(Qwant.class);
 	public static final String endpoint = "https://api.qwant.com/egp/search/web";
 	
-	// GET https://api.qwant.com/egp/search/web?q=bdtheque born to be a larve returns structured json
 	public static Response search(String query){
 		
 		Client client = ClientBuilder.newClient(new ClientConfig());
@@ -42,9 +44,10 @@ public class Qwant {
 		}
 		return null;
 	}
-	
-	public static void main(String[] args) {
-		Response r = Qwant.search("Born to be a larve");
+
+	@Override
+	public ISearchResult getSearchResult(String query) {
+		Response r = Qwant.search(query);
 		InputStream is = (InputStream)r.getEntity();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		StringBuilder result = new StringBuilder();
@@ -59,6 +62,6 @@ public class Qwant {
 		System.out.println(result.toString());
 		Gson gson = new Gson();
 		QwantResponse qr = gson.fromJson(result.toString(), QwantResponse.class);
-		System.out.println(qr.getStatus());
+		return qr;
 	}
 }

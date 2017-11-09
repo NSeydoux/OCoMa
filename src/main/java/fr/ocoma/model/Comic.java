@@ -10,7 +10,6 @@ import org.framagit.nseydoux.ogm.graph.Resource;
 
 @OwlClass("http://comicmeta.org/cbo/Comic")
 public class Comic extends Resource {
-
 	@DataProperty("http://purl.org/dc/terms/title")
 	private String title;
 	@DataProperty("http://example.com/ns#published")

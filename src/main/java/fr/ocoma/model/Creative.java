@@ -3,7 +3,7 @@ package fr.ocoma.model;
 import org.framagit.nseydoux.ogm.graph.Resource;
 
 public class Creative extends Resource {
-
+	
 	private String name;
 	
 	public Creative(String uri) {
