@@ -1,5 +1,5 @@
 import { describe, it, expect } from "@jest/globals";
-import { lookup, extractBook } from "./isbn_lookup";
+import { hitGoogleApi, parseGoogleBooksResponse } from "./isbn_lookup";
 
 /* eslint-disable no-useless-escape */
 const EXAMPLE_JSON = `{
@@ -74,7 +74,7 @@ const EXAMPLE_JSON = `{
     ]
 }`;
 
-describe("lookup", () => {
+describe("hitGoogleApi", () => {
     // @ts-ignore
     global.fetch = jest.fn(() =>
         Promise.resolve({
@@ -83,16 +83,16 @@ describe("lookup", () => {
     );
 
     it("builds a correct Google Books request", async () => {
-        await lookup("9782205049657");
+        await hitGoogleApi("9782205049657");
         expect(fetch).toHaveBeenCalledWith(
             "https://www.googleapis.com/books/v1/volumes?apiKey=AIzaSyDH1vFUH98bTwu9iYZqYGbE04wrn7cvEpo&q=isbn%3A9782205049657"
         )
     })
 })
 
-describe("extractBook", () => {
+describe("parseGoogleBooksResponse", () => {
     it("extracts books from well-formed JSON", () => {
-        const bookInfo = extractBook(EXAMPLE_JSON);
+        const bookInfo = parseGoogleBooksResponse(EXAMPLE_JSON);
         expect(bookInfo?.title).toEqual("Quelque part entre les ombres");
         expect(bookInfo?.authors).toEqual([
             "Juan Díaz Canales",
@@ -105,11 +105,11 @@ describe("extractBook", () => {
     });
 
     it("throws on malformed JSON", () => {
-        expect(() => extractBook("This is not proper json")).toThrow();
+        expect(() => parseGoogleBooksResponse("This is not proper json")).toThrow();
     })
 
     it("returns undefined for JSON inconsistent with the expected schema", () => {
-        const bookInfo = extractBook("\"This is proper json\"");
+        const bookInfo = parseGoogleBooksResponse("\"This is proper json\"");
         expect(bookInfo).toBeUndefined();
     })
 })
