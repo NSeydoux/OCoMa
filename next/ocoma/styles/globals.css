@@ -15,6 +15,8 @@ a {
   box-sizing: border-box;
 }
 
+/* SIDE MENU */
+
 .sidenav {
   height: 100%;
   width: 0;
@@ -53,3 +55,78 @@ a {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 }
+
+/* Top menu */
+
+header {
+  top: 0;
+}
+
+ul.horizontal {
+    left: 0;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: white;
+}
+
+ul.horizontal li {
+    float: left;
+}
+
+ul.horizontal li a {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+ul.horizontal li a:hover:not(.active) {
+    background-color: darkgrey;
+    color: white;
+}
+
+ul.horizontal li a.active {
+    background-color:grey;
+    color: white
+}
+
+ul.divider li {
+    float: left;
+    border-right:1px solid #bbb;
+}
+
+ul.divider li:last-child {
+    border-right: none;
+}
+ul.border {
+    border: 1px solid #555;
+}
+
+ul.border li a {
+    padding: 8px 16px;
+}
+
+ul.border li {
+    text-align: center;
+    border-bottom: 1px solid #555;
+}
+
+ul.border li:last-child {
+    border-bottom: none;
+}
+
+/* Barcode container */
+
+#barcode-container canvas {
+  width: 0;
+  height: 0;
+}
+
+#barcode-container video {
+  width: 480;
+  height: 320;
+}
+

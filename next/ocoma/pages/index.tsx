@@ -1,7 +1,6 @@
-import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
-
+import { Layout } from "./_layouts/layout";
 import {
   SessionProvider,
   LoginButton,
@@ -14,6 +13,7 @@ import {
 import React, { useState } from 'react';
 
 export const redirectUrl = "http://localhost:3000/";
+export const oidcIssuer = "https://pod.inrupt.com";
 
 export function Name() {
   const { session, sessionRequestInProgress } = useSession();
@@ -35,38 +35,15 @@ export function Name() {
   }
 }
 
-function openNav(e) {
-  document.getElementById("sideNav").style.width = "250px";
-}
-
-function closeNav(e) {
-  document.getElementById("sideNav").style.width = "0";
-}
-
 // @ts-ignore
 export default function Home() {
-  const [idp, setIdp] = useState("https://solid.zwifi.eu");
+  // const [idp, setIdp] = useState("https://solid.zwifi.eu");
   return (
-    <SessionProvider sessionId="ocoma-session">
-      <div className={styles.container}>
-        <Head>
-          <title>OCoMa</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
+    <SessionProvider>
+      <Layout oidcIssuer={ oidcIssuer } redirectUrl={redirectUrl}>
         <main className={styles.main}>
           <h1 className={styles.title}>OCoMa</h1>
-          <input type="url" value={idp} onChange={(e) => setIdp(e.target.value)} />
-          <span onClick={openNav}>Menu</span>
-          <nav id="sideNav" className="sidenav">
-            <a href="javascript:void(0)" className="closebtn" onClick={closeNav}>&times;</a>
-            <Link href="/about"><a href="#">About</a></Link>
-            <Link href="/services"><a href="#">Services</a></Link>
-            <a href="#">Clients</a>
-            <a href="#">Contact</a>
-          </nav>
-          <LoginButton oidcIssuer={idp} redirectUrl={redirectUrl} />
-          <LogoutButton />
+          {/* <input type="url" value={idp} onChange={(e) => setIdp(e.target.value)} /> */}
 
           <div className={styles.grid}>
             <Link href="/add">
@@ -108,7 +85,7 @@ export default function Home() {
             <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
           </a>
         </footer>
-      </div>
+        </Layout>
     </SessionProvider>
   )
 }

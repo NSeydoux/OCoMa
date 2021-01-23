@@ -18,10 +18,11 @@ import {
   redirectUrl
 } from "./index"
 import { getSession } from '../lib/auth';
+import { runDetection } from "../lib/barcode"
 
 // The barcode component must be loaded client-side only
 const BarcodeReader = dynamic(
-  () => import("react-webcam-barcode-scanner"),
+  () => import("../components/barcode"),
   { ssr: false }
 );
 
@@ -55,7 +56,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
 function Add({ comicTitle }) {
 
-    const [ isbn, setIsbn ] = useState('Not Found');
+    const [ isbn, setIsbn ] = useState(0);
     const [idp, setIdp] = useState("https://solid.zwifi.eu");
     const [barcode, setBarcode] = useState(false);
 
@@ -64,23 +65,7 @@ function Add({ comicTitle }) {
       // The default behaviour of the button is to resubmit. 
       // This prevents the page from reloading.
       // e.preventDefault();
-      console.log(`Looking up ISBN ${isbn}`);
-      
-    }
-
-    function barcodeReader(showBarcode: boolean) {
-      if (showBarcode) {
-        return <BarcodeReader
-          width={250}
-          height={250}
-          onUpdate={(err, result) => {
-            if (result) {
-              setIsbn(result.getText())
-            }
-          }}
-        />
-      }
-      return <div></div>
+      console.log(`Looking up ISBN ${isbn}`); 
     }
 
     return (
@@ -89,7 +74,8 @@ function Add({ comicTitle }) {
         <h1 className={styles.title}>OCoMa</h1>
         <h3><Name></Name>, extend your collection</h3>
         <p>Add a book or a series. <FontAwesomeIcon icon={faBarcode} onClick={() => setBarcode(!barcode)} size="3x"/></p>
-        {barcodeReader(barcode)}
+        <div id="barcode-container"></div>
+        <BarcodeReader enabled={barcode} onDetectedCallback={setIsbn}/>
         <form>
           <label>
             ISBN: <input
@@ -97,7 +83,7 @@ function Add({ comicTitle }) {
                 value={isbn}
                 name="isbn"
                 onChange={e => {
-                  setIsbn(e.target.value);
+                  setIsbn(parseInt(e.target.value));
                 }}
               />
           </label>
