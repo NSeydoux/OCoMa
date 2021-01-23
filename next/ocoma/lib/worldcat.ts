@@ -40,12 +40,3 @@ export async function lookupWorldcatOclc(oclcUri: string): Promise<string | null
     }
     return null;
 }
-
-export async function processResource(data: string): Promise<void> {
-    // const parser = new Parser();
-    // const quads = parser.parse(data);
-    // const dataset = await createSolidDataset();
-    // for (const quad of quads) {
-    //     dataset.
-    // }
-}

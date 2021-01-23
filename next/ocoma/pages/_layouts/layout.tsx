@@ -30,7 +30,7 @@ export const Layout: React.FC<{children:JSX.Element[] | JSX.Element, redirectUrl
         </header>
         <nav id="sideNav" className="sidenav">
             <a className="closebtn" onClick={closeNav}>&times;</a>
-            <Link href="/add"><a>Add</a></Link>
+            <Link href="/scan"><a>Scan</a></Link>
             <Link href="/browse"><a>Browse</a></Link>
             <Link href="/give"><a>Give</a></Link>
           </nav>
