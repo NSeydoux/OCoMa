@@ -7,7 +7,6 @@ import {
 import {
   redirectUrl
 } from "./index"
-import { Layout } from './_layouts/layout';
 
 export const getServerSideProps: GetServerSideProps = async context => {
   console.log(`Looking up ${context.req.url}`);
@@ -38,10 +37,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
 const Add: React.FC<{comicTitle: string}> = ({comicTitle}) => {
   return (
     <SessionProvider>
-      <Layout oidcIssuer={ "https://pod.inrupt.com" } redirectUrl={redirectUrl}>
+      {/* <Layout oidcIssuer={ "https://pod.inrupt.com" } redirectUrl={redirectUrl}>
         <h1>Add a book to your library!</h1>
         <p>{comicTitle}</p>
-      </Layout>
+      </Layout> */}
     </SessionProvider>
   )
 }
