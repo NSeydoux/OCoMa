@@ -1,6 +1,5 @@
 import Quagga from "quagga";
-
-export const BARCODE_CONTAINER_ID = 'barcode-container';
+import { BARCODE_CONTAINER_ID } from "../components/domConstants"
 
 const quaggaState = {
   inputStream : {
