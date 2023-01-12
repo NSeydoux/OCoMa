@@ -1,8 +1,9 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import { useState } from 'react';
-import { BARCODE_CONTAINER_ID } from "../../src/lib/barcode";
+import { useEffect, useState } from 'react';
+import { getSession } from "../../src/lib/session";
+import { BARCODE_CONTAINER_ID } from "../../src/components/domConstants";
 
 // The barcode component must be loaded client-side only
 const BarcodeReader = dynamic(
@@ -12,7 +13,14 @@ const BarcodeReader = dynamic(
 
 export default function Add() {
   const [barcode, setBarcode] = useState<boolean>(false);
-  const [isbn, setIsbn ] = useState<number>(); 
+  const [isbn, setIsbn ] = useState<number>();
+
+  useEffect(() =>  {
+    getSession().handleIncomingRedirect({
+      restorePreviousSession: true
+    });
+  });
+  
   return (
     <>
       <Head>
@@ -21,7 +29,7 @@ export default function Add() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main>
-        <h1>Add a book to your library</h1>
+        <h1>Add a book to your library, {getSession().info.webId}</h1>
         <Link href="/">Go back to homepage</Link>
 
         <form>
@@ -29,12 +37,12 @@ export default function Add() {
             {barcode ? "End scan" : "Scan"}
           </button>
           <br/>
-          <label htmlFor="title">Title:
-            <input type="text" name="title"></input>
-          </label>
-          <br/>
           <label htmlFor="isbn">ISBN:
             <input type="text" name="isbn" value={isbn}></input>
+          </label>
+          <br/>
+          <label htmlFor="title">Title:
+            <input type="text" name="title"></input>
           </label>
         </form>
         {/* The following must be present for the BarcodeReader component to anchor into. */}
