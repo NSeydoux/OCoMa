@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getSession } from "../../src/lib/session";
 import { BARCODE_CONTAINER_ID } from "../../src/components/domConstants";
 
@@ -13,7 +13,14 @@ const BarcodeReader = dynamic(
 
 export default function Add() {
   const [barcode, setBarcode] = useState<boolean>(false);
-  const [isbn, setIsbn ] = useState<number>(); 
+  const [isbn, setIsbn ] = useState<number>();
+
+  useEffect(() =>  {
+    getSession().handleIncomingRedirect({
+      restorePreviousSession: true
+    });
+  });
+  
   return (
     <>
       <Head>
@@ -32,6 +39,10 @@ export default function Add() {
           <br/>
           <label htmlFor="isbn">ISBN:
             <input type="text" name="isbn" value={isbn}></input>
+          </label>
+          <br/>
+          <label htmlFor="title">Title:
+            <input type="text" name="title"></input>
           </label>
         </form>
         {/* The following must be present for the BarcodeReader component to anchor into. */}

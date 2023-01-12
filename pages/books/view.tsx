@@ -1,8 +1,16 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { useEffect } from 'react';
 import { getSession } from "../../src/lib/session";
 
-export default function Add() {
+export default function View() {
+
+  useEffect(() =>  {
+    getSession().handleIncomingRedirect({
+      restorePreviousSession: true
+    });
+  });
+
   return (
     <>
       <Head>

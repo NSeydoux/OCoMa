@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 import { useEffect, useState } from "react";
 import { NavBar } from "../src/components/navbar";
@@ -21,15 +22,25 @@ const Homepage = ({loggedIn}: { loggedIn: boolean}) => {
 
 
 export default function Home() {
+  const router = useRouter();
   const [isLoggedIn, setLoggedIn] = useState<boolean>(getSession().info.isLoggedIn);
+
   useEffect(() => {
     (async () => {
       const session = getSession();
       session.onLogin(() => { setLoggedIn(true)} );
       session.onLogout(() => { setLoggedIn(false)} );
-      await session.handleIncomingRedirect(window.location.href);
+      session.onSessionRestore((url) => { 
+        setLoggedIn(true)
+        router.push(url);
+      })
+      await session.handleIncomingRedirect({
+        restorePreviousSession: true,
+        url: window.location.href
+      });
     })();
   })
+
   return (
     <>
       <Head>
