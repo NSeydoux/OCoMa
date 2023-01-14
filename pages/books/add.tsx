@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react';
 import { getSession } from "../../src/lib/session";
 import { BARCODE_CONTAINER_ID } from "../../src/components/domConstants";
-import { useFormik } from "formik";
+import { Field, FieldArray, Formik } from "formik";
 
 // The barcode component must be loaded client-side only
 const BarcodeReader = dynamic(
@@ -21,19 +21,6 @@ export default function Add() {
       restorePreviousSession: true
     });
   });
-
-  const bookForm = useFormik({
-    initialValues: {
-      title: "",
-      isbn: "",
-    },
-    onSubmit: (values, { setSubmitting }) => {
-      setTimeout(() => {
-        console.log(JSON.stringify(values, null, 2));
-        setSubmitting(false);
-      }, 400);
-    },
-  });
   
   return (
     <>
@@ -45,36 +32,72 @@ export default function Add() {
       <main>
         <h1>Add a book to your library, {getSession().info.webId}</h1>
         <Link href="/">Go back to homepage</Link>
-
-        <form onSubmit={bookForm.handleSubmit}>
-          <label htmlFor="title">
-            Title:
-            <input
-              type="text"
-              name="title"
-              id="title"
-              onChange={bookForm.handleChange}
-              value={bookForm.values.title}
-            />
-          </label> 
-          { bookForm.errors.title && bookForm.touched.title }
-          <br />
-          <label htmlFor="isbn">
-            <button onClick={() => { setBarcode((prevValue) => !prevValue) }}>ISBN: </button>
-            <input
-              type="isbn"
-              name="isbn"
-              id="isbn"
-              onChange={bookForm.handleChange}
-              value={bookForm.values.isbn}
-            />
-          </label>
-          {bookForm.errors.isbn && bookForm.touched.isbn}
-          <br />
-          <button type="submit" disabled={bookForm.isSubmitting}>
-            Submit
-          </button>
-        </form>
+        <Formik
+          initialValues={{
+            title: "",
+            isbn: "",
+            authors: [""]
+          }}
+          onSubmit={(values, { setSubmitting }) => {
+            setTimeout(() => {
+              console.log(JSON.stringify(values, null, 2));
+              setSubmitting(false);
+            }, 400);
+          }}
+        >
+          {props => (
+          <form onSubmit={props.handleSubmit}>
+            <label htmlFor="title">
+              Title:
+              <input
+                type="text"
+                name="title"
+                id="title"
+                onChange={props.handleChange}
+                value={props.values.title}
+              />
+            </label> 
+            { props.errors.title && props.touched.title }
+            <br />
+            <label htmlFor="isbn">
+              <button onClick={() => { setBarcode((prevValue) => !prevValue) }}>ISBN: </button>
+              <input
+                type="isbn"
+                name="isbn"
+                id="isbn"
+                onChange={props.handleChange}
+                value={props.values.isbn}
+              />
+            </label>
+            {props.errors.isbn && props.touched.isbn}
+            <br />
+            <FieldArray name="authors">
+              {({ remove, push }) => (
+                <div>
+                  {props.values.authors.map((author, index) => {
+                    return (<label htmlFor={`autors.${index}`} key={index}>
+                    Author:
+                    <Field
+                      type="text"
+                      name={`autors.${index}`}
+                      id={`autors.${index}`}
+                    >
+                    </Field>
+                    {index !== 0 ? <button onClick={() => {remove(index)} }>x</button> : <></>}
+                    <br/>
+                  </label>)
+                  })}
+                  <button onClick={() => push("") }>+</button>
+                </div>)
+              }
+            </FieldArray>
+            <br />
+            <button type="submit" disabled={props.isSubmitting}>
+              Submit
+            </button>
+          </form>
+          )}
+        </Formik>
         {/* The following must be present for the BarcodeReader component to anchor into. */}
         <div id={BARCODE_CONTAINER_ID}></div>
         <BarcodeReader enabled={barcode} onDetectedCallback={setIsbn}/>
