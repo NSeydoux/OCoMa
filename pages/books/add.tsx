@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react';
 import { getSession } from "../../src/lib/session";
 import { BARCODE_CONTAINER_ID } from "../../src/components/domConstants";
+import { useFormik } from "formik";
 
 // The barcode component must be loaded client-side only
 const BarcodeReader = dynamic(
@@ -20,6 +21,19 @@ export default function Add() {
       restorePreviousSession: true
     });
   });
+
+  const bookForm = useFormik({
+    initialValues: {
+      title: "",
+      isbn: "",
+    },
+    onSubmit: (values, { setSubmitting }) => {
+      setTimeout(() => {
+        console.log(JSON.stringify(values, null, 2));
+        setSubmitting(false);
+      }, 400);
+    },
+  });
   
   return (
     <>
@@ -32,18 +46,34 @@ export default function Add() {
         <h1>Add a book to your library, {getSession().info.webId}</h1>
         <Link href="/">Go back to homepage</Link>
 
-        <form>
-          <button type="button" onClick={() => setBarcode((prevState) => !prevState)}>
-            {barcode ? "End scan" : "Scan"}
+        <form onSubmit={bookForm.handleSubmit}>
+          <label htmlFor="title">
+            Title:
+            <input
+              type="text"
+              name="title"
+              id="title"
+              onChange={bookForm.handleChange}
+              value={bookForm.values.title}
+            />
+          </label> 
+          { bookForm.errors.title && bookForm.touched.title }
+          <br />
+          <label htmlFor="isbn">
+            <button onClick={() => { setBarcode((prevValue) => !prevValue) }}>ISBN: </button>
+            <input
+              type="isbn"
+              name="isbn"
+              id="isbn"
+              onChange={bookForm.handleChange}
+              value={bookForm.values.isbn}
+            />
+          </label>
+          {bookForm.errors.isbn && bookForm.touched.isbn}
+          <br />
+          <button type="submit" disabled={bookForm.isSubmitting}>
+            Submit
           </button>
-          <br/>
-          <label htmlFor="isbn">ISBN:
-            <input type="text" name="isbn" value={isbn}></input>
-          </label>
-          <br/>
-          <label htmlFor="title">Title:
-            <input type="text" name="title"></input>
-          </label>
         </form>
         {/* The following must be present for the BarcodeReader component to anchor into. */}
         <div id={BARCODE_CONTAINER_ID}></div>

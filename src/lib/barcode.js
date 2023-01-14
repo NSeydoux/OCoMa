@@ -1,31 +1,6 @@
 import Quagga from "quagga";
 import { BARCODE_CONTAINER_ID } from "../components/domConstants"
 
-const quaggaState = {
-  inputStream : {
-    type : "LiveStream",
-    constraints: {
-      width: {min: 640},
-      height: {min: 480},
-      facingMode: "environment",
-      aspectRatio: {min: 1, max: 2}
-  },
-    target: document.querySelector(`#${BARCODE_CONTAINER_ID}`)
-  },
-  locator: {
-    patchSize: "medium",
-    halfSample: true
-  },
-  numOfWorkers: 2,
-  frequency: 10,
-  decoder : {
-    readers: [{
-      format: "ean_reader",
-      config: {}
-    }]
-  }, locate: true
-}
-
 function stopScanning() {
   Quagga.stop();
   const container = document.querySelector(`#${BARCODE_CONTAINER_ID}`);
@@ -37,6 +12,31 @@ function stopScanning() {
 }
 
 export function runDetection(onDetectedCallback) {
+  const quaggaState = {
+    inputStream : {
+      type : "LiveStream",
+      constraints: {
+        width: {min: 640},
+        height: {min: 480},
+        facingMode: "environment",
+        aspectRatio: {min: 1, max: 2}
+    },
+      target: document.querySelector(`#${BARCODE_CONTAINER_ID}`)
+    },
+    locator: {
+      patchSize: "medium",
+      halfSample: true
+    },
+    numOfWorkers: 2,
+    frequency: 10,
+    decoder : {
+      readers: [{
+        format: "ean_reader",
+        config: {}
+      }]
+    }, locate: true
+  }
+  
   Quagga.init(quaggaState, function(err) {
       if (err) {
           console.log(err);
