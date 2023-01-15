@@ -2,6 +2,7 @@ import { BARCODE_CONTAINER_ID } from "../../src/components/domConstants";
 import { Field, FieldArray, Formik } from "formik";
 import dynamic from "next/dynamic";
 import { ChangeEventHandler, useState } from "react";
+import type { Book } from "../lib/data/books";
 
 // The barcode component must be loaded client-side only
 const BarcodeReader = dynamic(
@@ -26,6 +27,31 @@ const BookTitleField = ({
         onChange={handleChange}
         value={title}
       />
+    </label>
+  )
+}
+
+const LangTagField = ({
+  handleChange,
+  langTag
+}: {
+  handleChange: ChangeEventHandler,
+  langTag: string
+}) => {
+  return (
+    <label htmlFor="langTag">
+      Title:
+      <select
+        name="langTag"
+        id="langTag"
+        onChange={handleChange}
+        value={langTag}
+      >
+        <option value={"fr"}>fr</option>
+        <option value={"en"}>en</option>
+        <option value={"es"}>es</option>
+        <option value={"ru"}>ru</option>
+      </select>
     </label>
   )
 }
@@ -88,7 +114,7 @@ const SeriesField = ({
   series,
   handleChange
 }: {
-  series: {
+  series?: {
     name: string,
     index?: number
   },
@@ -109,6 +135,17 @@ const SeriesField = ({
   )
 }
 
+const initalValues: Book = {
+  title: "",
+  langTag: "fr",
+  isbn: 0,
+  authors: [""],
+  series: {
+    name: "",
+    index: undefined
+  }
+}
+
 export default function AddBookForm() {
   const [barcode, setBarcode] = useState<boolean>(false);
   const [isbn, setIsbn ] = useState<number>();
@@ -117,15 +154,7 @@ export default function AddBookForm() {
 
   return (<div>
     <Formik
-      initialValues={{
-        title: "",
-        isbn: undefined,
-        authors: [""],
-        series: {
-          name: "",
-          index: undefined
-        }
-      }}
+      initialValues={initalValues}
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
           console.log(JSON.stringify(values, null, 2));
@@ -140,6 +169,10 @@ export default function AddBookForm() {
             title={props.values.title}
           />
           { props.errors.title && props.touched.title }
+          <LangTagField
+            handleChange={props.handleChange}
+            langTag={props.values.langTag}
+          />
           <br />
           <IsbnField
             handleChange={props.handleChange}
