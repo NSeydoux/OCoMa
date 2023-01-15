@@ -43,7 +43,7 @@ const IsbnField = ({
     <label htmlFor="isbn">
       <button type="button" onClick={() => handleBarCode()}>ISBN: </button>
       <input
-        type="isbn"
+        type="text"
         name="isbn"
         id="isbn"
         onChange={handleChange}
@@ -84,6 +84,31 @@ const AuthorsField = ({
   )
 }
 
+const SeriesField = ({
+  series,
+  handleChange
+}: {
+  series: {
+    name: string,
+    index?: number
+  },
+  handleChange: ChangeEventHandler
+}) => {
+  return (
+    <div>
+      <label htmlFor="series.name">
+        Series name: 
+        <Field name="series.name" onChange={handleChange} />
+      </label>
+      <br />
+      <label htmlFor="series.index">
+        Series index:
+        <Field name="series.index" onChange={handleChange} />
+      </label>
+    </div>
+  )
+}
+
 export default function AddBookForm() {
   const [barcode, setBarcode] = useState<boolean>(false);
   const [isbn, setIsbn ] = useState<number>();
@@ -95,7 +120,11 @@ export default function AddBookForm() {
       initialValues={{
         title: "",
         isbn: undefined,
-        authors: [""]
+        authors: [""],
+        series: {
+          name: "",
+          index: undefined
+        }
       }}
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
@@ -123,6 +152,11 @@ export default function AddBookForm() {
             authors={props.values.authors}
           />
           <br />
+          <SeriesField 
+            series={props.values.series}
+            handleChange={props.handleChange}
+          />
+          <br />
           <button type="submit" disabled={props.isSubmitting}>
             Submit
           </button>
@@ -131,6 +165,6 @@ export default function AddBookForm() {
     </Formik>
     {/* The following must be present for the BarcodeReader component to anchor into. */}
     <div id={BARCODE_CONTAINER_ID}></div>
-    <BarcodeReader enabled={barcode} onDetectedCallback={setIsbn}/>)
+    <BarcodeReader enabled={barcode} onDetectedCallback={setIsbn}/>
   </div>)
 }
