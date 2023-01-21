@@ -1,14 +1,33 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { discoverLibraryRoot } from '../../src/lib/discovery';
 import { getSession } from "../../src/lib/session";
 
+const LibraryInitializer = () => {
+  return <p>Initialize your library!</p>
+}
+
+const LibraryExplorer = ({ root }: { root: string | null }) => {
+  if (root === null) {
+    return <LibraryInitializer />
+  }
+  return (<div>
+    <p>Showing your library at <code>{root}</code>.</p>
+  </div>)
+}
+
 export default function View() {
+  const [libraryRoot, setLibraryRoot] = useState<string | null>(null);
 
   useEffect(() =>  {
-    getSession().handleIncomingRedirect({
-      restorePreviousSession: true
-    });
+    (async () => {
+      const session = getSession();
+      await session.handleIncomingRedirect({
+        restorePreviousSession: true
+      });
+      setLibraryRoot(await discoverLibraryRoot(session));
+    })();
   });
 
   return (
@@ -21,9 +40,7 @@ export default function View() {
       <main>
         <h1>View all books in your library, {getSession().info.webId}</h1>
         <Link href="/">Go back to homepage</Link>
-        <ul>
-          <li>Les Notes T1, Boulet</li>
-        </ul>
+        <LibraryExplorer root={libraryRoot} />
       </main>
     </>
   )

@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@inrupt/solid-client": "^1.24.0",
     "@inrupt/solid-client-authn-browser": "^1.12.3",
+    "@inrupt/vocab-common-rdf": "^1.0.5",
     "@next/font": "13.1.1",
     "@types/node": "18.11.18",
     "@types/react": "18.0.26",
