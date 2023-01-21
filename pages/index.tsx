@@ -4,15 +4,29 @@ import { useRouter } from 'next/router'
 
 import { useEffect, useState } from "react";
 import { NavBar } from "../src/components/navbar";
+import AddPage from '../src/components/pages/AddPage';
 import { getSession } from "../src/lib/session";
+import ViewPage from "../src/components/pages/ViewPage";
 
-const Homepage = ({loggedIn}: { loggedIn: boolean}) => {
+const CurrentPage = ({ libraryRoot, page }: { libraryRoot?: string, page: "add"|"view"}) => {
+  if (page === "add") {
+    return <AddPage />;
+  }
+  return <ViewPage />
+}
+
+const Homepage = ({loggedIn, libraryRoot}: { loggedIn: boolean, libraryRoot?: string}) => {
+  const [currentPage, setCurrentPage] = useState<"add"|"view">("view");
+  
   if(loggedIn) {
     return (
-      <ul>
-        <li><Link href="/books/add">Add a book</Link></li>
-        <li><Link href="/books/view">View your books</Link></li>
-      </ul>
+      <div>
+        <ul>
+          <li onClick={() => setCurrentPage("add")}>Add a book</li>
+          <li onClick={() => setCurrentPage("view")}>View your books</li>
+        </ul>
+        <CurrentPage page={currentPage} libraryRoot={libraryRoot} />
+      </div>
     )
   }
   return (
@@ -24,6 +38,7 @@ const Homepage = ({loggedIn}: { loggedIn: boolean}) => {
 export default function Home() {
   const router = useRouter();
   const [isLoggedIn, setLoggedIn] = useState<boolean>(getSession().info.isLoggedIn);
+  const [libraryRoot, setLibraryRoot] = useState<string>();
 
   useEffect(() => {
     (async () => {
