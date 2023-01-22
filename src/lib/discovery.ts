@@ -3,13 +3,13 @@ import { Session } from "@inrupt/solid-client-authn-browser";
 import { RDF } from "@inrupt/vocab-common-rdf";
 import { OCOMA } from "./data/vocabConstants";
 
-export async function discoverLibraryRoot(session: Session): Promise<string | null> {
+export async function discoverLibraryRoot(session: Session): Promise<string | undefined> {
   if (!session.info.isLoggedIn) {
-    return null;
+    return undefined;
   }
   const pods = await getPodUrlAll(session.info.webId!, { fetch: session.fetch });
   if (pods.length === 0) {
-    return null;
+    return undefined;
   }
   // Arbitrarily pick a Pod. In the future, the user should be prompted.
   const podRoot = pods[0];
@@ -24,5 +24,5 @@ export async function discoverLibraryRoot(session: Session): Promise<string | nu
   );
   return candidateLibraryContainers.length > 0
     ? candidateLibraryContainers[0]
-    : null;
+    : undefined;
 }

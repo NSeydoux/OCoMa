@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { OCOMA } from "../lib/data/vocabConstants";
 import { getSession } from "../lib/session";
 
-export default function LibraryInitializer() {
+export default function LibraryInitializer({ setLibraryRoot }: { setLibraryRoot: (root: string) => void }) {
   const [podRootUrl, setPodRootUrl] = useState<string>();
   const [rootUrl, setRootUrl] = useState<string>();
   const [childResources, setChildResources] = useState<string[]>([]);
@@ -78,6 +78,7 @@ export default function LibraryInitializer() {
           const updatedContainer = setThing(containerWithNew, typedContainerThing);
           await saveSolidDatasetAt(rootUrl, updatedContainer, { fetch: session.fetch });
           setChildResources(getContainedResourceUrlAll(updatedContainer));
+          setLibraryRoot(createdIri);
         }}>
           Create library root
         </button>

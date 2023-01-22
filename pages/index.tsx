@@ -8,14 +8,14 @@ import AddPage from '../src/components/pages/AddPage';
 import { getSession } from "../src/lib/session";
 import ViewPage from "../src/components/pages/ViewPage";
 
-const CurrentPage = ({ libraryRoot, page }: { libraryRoot?: string, page: "add"|"view"}) => {
+const CurrentPage = ({ libraryRoot, page, setLibraryRoot }: { libraryRoot?: string, page: "add"|"view", setLibraryRoot: (url?: string) => void}) => {
   if (page === "add") {
     return <AddPage />;
   }
-  return <ViewPage />
+  return <ViewPage libraryRoot={libraryRoot} setLibraryRoot={setLibraryRoot} />
 }
 
-const Homepage = ({loggedIn, libraryRoot}: { loggedIn: boolean, libraryRoot?: string}) => {
+const Homepage = ({loggedIn, libraryRoot, setLibraryRoot }: { loggedIn: boolean, libraryRoot?: string, setLibraryRoot: (url?: string) => void}) => {
   const [currentPage, setCurrentPage] = useState<"add"|"view">("view");
   
   if(loggedIn) {
@@ -25,7 +25,7 @@ const Homepage = ({loggedIn, libraryRoot}: { loggedIn: boolean, libraryRoot?: st
           <li onClick={() => setCurrentPage("add")}>Add a book</li>
           <li onClick={() => setCurrentPage("view")}>View your books</li>
         </ul>
-        <CurrentPage page={currentPage} libraryRoot={libraryRoot} />
+        <CurrentPage page={currentPage} libraryRoot={libraryRoot} setLibraryRoot={setLibraryRoot} />
       </div>
     )
   }
@@ -56,6 +56,10 @@ export default function Home() {
     })();
   })
 
+  useEffect(() => {
+    console.log("Library root set to ", libraryRoot)
+  }, [libraryRoot])
+
   return (
     <>
       <Head>
@@ -66,7 +70,7 @@ export default function Home() {
       <main>
         <NavBar />
         <h1>Welcome to OCoMa</h1>
-        <Homepage loggedIn={isLoggedIn}/>
+        <Homepage loggedIn={isLoggedIn} libraryRoot={libraryRoot} setLibraryRoot={setLibraryRoot}/>
       </main>
     </>
   )
