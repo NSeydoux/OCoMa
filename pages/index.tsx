@@ -4,15 +4,60 @@ import { useRouter } from 'next/router'
 
 import { useEffect, useState } from "react";
 import { NavBar } from "../src/components/navbar";
+import AddPage from '../src/components/pages/AddPage';
 import { getSession } from "../src/lib/session";
+import ViewPage from "../src/components/pages/ViewPage";
+import { getSourceIri, isPodOwner, saveSolidDatasetAt, SolidDataset } from '@inrupt/solid-client';
+import { loadLibrary } from '../src/lib/discovery';
 
-const Homepage = ({loggedIn}: { loggedIn: boolean}) => {
+const CurrentPage = ({
+  page,
+  setLibraryRoot,
+  libraryResource,
+  setLibraryResource
+}: {
+  libraryRoot?: string,
+  page: "add"|"view",
+  setLibraryRoot: (url?: string) => void,
+  libraryResource?: SolidDataset
+  setLibraryResource: (library: SolidDataset) => void
+}) => {
+  if (page === "add") {
+    return <AddPage library={libraryResource} setLibrary={setLibraryResource} />;
+  }
+  return <ViewPage library={libraryResource} setLibraryRoot={setLibraryRoot} />
+}
+
+const Homepage = ({
+  loggedIn,
+  libraryRoot,
+  setLibraryRoot,
+  libraryResource,
+  setLibraryResource
+}: {
+  loggedIn: boolean,
+  libraryRoot?: string,
+  setLibraryRoot: (url?: string) => void,
+  libraryResource?: SolidDataset
+  setLibraryResource: (library: SolidDataset) => void
+}) => {
+  const [currentPage, setCurrentPage] = useState<"add"|"view">("view");
+  
   if(loggedIn) {
     return (
-      <ul>
-        <li><Link href="/books/add">Add a book</Link></li>
-        <li><Link href="/books/view">View your books</Link></li>
-      </ul>
+      <div>
+        <ul>
+          <li onClick={() => setCurrentPage("add")}>Add a book</li>
+          <li onClick={() => setCurrentPage("view")}>View your books</li>
+        </ul>
+        <CurrentPage 
+          page={currentPage}
+          libraryRoot={libraryRoot}
+          setLibraryRoot={setLibraryRoot}
+          libraryResource={libraryResource}
+          setLibraryResource={setLibraryResource}
+        />
+      </div>
     )
   }
   return (
@@ -20,10 +65,11 @@ const Homepage = ({loggedIn}: { loggedIn: boolean}) => {
   )
 }
 
-
 export default function Home() {
   const router = useRouter();
   const [isLoggedIn, setLoggedIn] = useState<boolean>(getSession().info.isLoggedIn);
+  const [libraryRoot, setLibraryRoot] = useState<string>();
+  const [libraryResource, setLibraryResource] = useState<SolidDataset>();
 
   useEffect(() => {
     (async () => {
@@ -41,6 +87,37 @@ export default function Home() {
     })();
   })
 
+  useEffect(() => {
+    (async () => {
+      if (libraryRoot === undefined) {
+        return;
+      }
+      const library = await loadLibrary(libraryRoot, getSession());
+      setLibraryResource(library);
+    })()
+  }, [libraryRoot])
+
+  const handleLibraryRoot = (newRoot?: string) => {
+    setLibraryRoot(newRoot);
+  }
+
+  const handleLibraryUpdate = async (updatedLibrary: SolidDataset) => {
+    if (libraryResource === undefined) {
+      return;
+    }
+    const targetUrl = getSourceIri(libraryResource);
+    if (targetUrl === null) {
+      return;
+    }
+    const persistedLibrary = await saveSolidDatasetAt(
+      targetUrl,
+      updatedLibrary, {
+        fetch: getSession().fetch
+      }
+    );
+    setLibraryResource(persistedLibrary);
+  }
+
   return (
     <>
       <Head>
@@ -51,7 +128,13 @@ export default function Home() {
       <main>
         <NavBar />
         <h1>Welcome to OCoMa</h1>
-        <Homepage loggedIn={isLoggedIn}/>
+        <Homepage 
+          loggedIn={isLoggedIn}
+          libraryRoot={libraryRoot}
+          setLibraryRoot={handleLibraryRoot}
+          libraryResource={libraryResource}
+          setLibraryResource={handleLibraryUpdate}
+        />
       </main>
     </>
   )
