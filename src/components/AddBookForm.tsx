@@ -3,6 +3,9 @@ import { Field, FieldArray, Formik } from "formik";
 import dynamic from "next/dynamic";
 import { ChangeEventHandler, useState } from "react";
 import type { Book } from "../lib/data/books";
+import { bookToRdf } from "../lib/data/books";
+import { getSourceIri, getThingAll, setThing, SolidDataset } from "@inrupt/solid-client";
+
 
 // The barcode component must be loaded client-side only
 const BarcodeReader = dynamic(
@@ -142,25 +145,34 @@ const initalValues: Book = {
   authors: [""],
   series: {
     name: "",
-    index: undefined
+    index: 0
   }
 }
 
-export default function AddBookForm() {
+export default function AddBookForm({
+  library,
+  setLibrary
+}: {
+  library: SolidDataset,
+  setLibrary: (library: SolidDataset) => void
+}) {
   const [barcode, setBarcode] = useState<boolean>(false);
   const [isbn, setIsbn ] = useState<number>();
   
   const handleBarCode = () => { setBarcode((prevValue) => !prevValue) };
+  const handleSubmit = (book: Book) => {
+    const baseUrl = getSourceIri(library);
+    if (baseUrl === null) {
+      throw new Error("Could not find library base URL");
+    }
+    const bookData = bookToRdf(book, baseUrl);
+    setLibrary(getThingAll(bookData).reduce(setThing, library));
+  }
 
   return (<div>
     <Formik
       initialValues={initalValues}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          console.log(JSON.stringify(values, null, 2));
-          setSubmitting(false);
-        }, 400);
-      }}
+      onSubmit={handleSubmit}
     >
       {props => (
         <form onSubmit={props.handleSubmit}>
