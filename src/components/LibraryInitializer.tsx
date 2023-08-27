@@ -74,7 +74,10 @@ export default function LibraryInitializer({ setLibraryRoot }: { setLibraryRoot:
           const createdIri = getSourceIri(created);
           const containerWithNew = await getSolidDataset(rootUrl, { fetch: session.fetch });
           const newContainerThing = getThing(containerWithNew, createdIri);
-          const typedContainerThing = addIri(newContainerThing!, RDF.type, OCOMA.Library);
+          if(newContainerThing === null) {
+            throw new Error(`Could not find ${createdIri} in ${rootUrl}`);
+          }
+          const typedContainerThing = addIri(newContainerThing, RDF.type, OCOMA.classes.Library);
           const updatedContainer = setThing(containerWithNew, typedContainerThing);
           await saveSolidDatasetAt(rootUrl, updatedContainer, { fetch: session.fetch });
           setChildResources(getContainedResourceUrlAll(updatedContainer));
