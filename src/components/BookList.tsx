@@ -16,7 +16,7 @@ export default function BookList({library}: { library: SolidDataset }) {
   const bookList = books
     .map((book) => rdfToBook(library, asUrl(book)))
     .map((bookData) => (
-      <li key={bookData.isbn}>{bookData.title}, {bookData.authors.reduce((prev, cur) => `${cur}, ${prev}`, "")}, (ISBN: {bookData.isbn})</li>
+      <li key={bookData.isbn}>{bookData.title}, {bookData.authors.reduce((prev, cur) => prev === "" ? cur : `${cur}, ${prev}`, "")}, (ISBN: {bookData.isbn})</li>
     ));
   return <ul>{bookList}</ul>;
 };
