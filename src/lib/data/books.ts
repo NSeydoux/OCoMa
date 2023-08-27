@@ -1,7 +1,7 @@
 import { SolidDataset, buildThing, asIri, setThing, createSolidDataset } from "@inrupt/solid-client";
-import { FOAF, DCTERMS } from "@inrupt/vocab-common-rdf";
+import { FOAF, DCTERMS, RDF } from "@inrupt/vocab-common-rdf";
 import { v4 } from "uuid";
-import { CBO } from "./vocabConstants";
+import { CBO, SCHEMA } from "./vocabConstants";
 
 export type Book = {
   title: string,
@@ -18,14 +18,16 @@ export function bookToRdf(book: Book, baseUrl: string): SolidDataset {
   const authors = book.authors.map(
     (author) => buildThing({
       url: new URL(`${author}_${v4()}`, baseUrl).href
-    }).addStringNoLocale(FOAF.name, author).build()
+    }).addStringNoLocale(FOAF.name, author)
+    .addUrl(RDF.type, FOAF.Person)
+    .build()
   );
   const seriesBuilder = buildThing({
     url: new URL(`${book.series?.name}_${v4()}`, baseUrl).href
-  });
+  }).addUrl(RDF.type, CBO.classes.Series);
   if(book.series !== undefined){
     seriesBuilder.addStringWithLocale(
-      CBO.seriesTitle,
+      CBO.properties.seriesTitle,
       book.series.name,
       book.langTag
     );
@@ -33,14 +35,15 @@ export function bookToRdf(book: Book, baseUrl: string): SolidDataset {
   const series = seriesBuilder.build();
 
   const bookBuilder = buildThing()
+    .addUrl(RDF.type, SCHEMA.classes.PublicationIssue)
     .addStringWithLocale(DCTERMS.title, book.title, book.langTag)
-    .addInteger(CBO.isbn, book.isbn);
+    .addInteger(CBO.properties.isbn, book.isbn);
   authors.forEach((author) => { bookBuilder.addIri(DCTERMS.creator, asIri(author))});
   if (book.series !== undefined) {
     bookBuilder.addInteger(
-      CBO.issueNumber,
+      CBO.properties.issueNumber,
       book.series.index
-    ).addIri(CBO.series, asIri(series))
+    ).addIri(CBO.properties.series, asIri(series))
   }
   return [
     authors,
