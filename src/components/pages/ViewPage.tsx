@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { discoverLibraryRoot } from '../../lib/discovery';
 import { getSession } from '../../lib/session';
 import LibraryInitializer from '../LibraryInitializer';
+import BookList from '../BookList';
 
 const LibraryExplorer = ({ library, setRoot }: { library?: SolidDataset, setRoot: (root?: string) => void }) => {
   if (library === undefined) {
@@ -10,6 +11,7 @@ const LibraryExplorer = ({ library, setRoot }: { library?: SolidDataset, setRoot
   }
   return (<div>
     <p>Showing your library at <code>{getSourceIri(library)}</code>.</p>
+    <BookList library={library}/>
   </div>)
 }
 
