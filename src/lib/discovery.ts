@@ -36,7 +36,7 @@ export async function discoverLibraryRoot(
     const resourceThing = getThing(podRootDataset, containedResourceUrl);
     return resourceThing === null
       ? false
-      : getUrlAll(resourceThing, RDF.type).includes(OCOMA.Library);
+      : getUrlAll(resourceThing, RDF.type).includes(OCOMA.classes.Library);
   });
   return candidateLibraryContainers.length > 0
     ? candidateLibraryContainers[0]
