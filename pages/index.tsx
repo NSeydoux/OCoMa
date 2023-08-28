@@ -74,18 +74,23 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       const session = getSession();
-      session.onLogin(() => { setLoggedIn(true)} );
-      session.onLogout(() => { setLoggedIn(false)} );
-      session.onSessionRestore((url) => { 
+      session.events.on("login", () => { setLoggedIn(true)} );
+      session.events.on("logout", () => { setLoggedIn(false)} );
+      session.events.on("sessionRestore", (url) => { 
         setLoggedIn(true)
         router.push(url);
       })
-      await session.handleIncomingRedirect({
-        restorePreviousSession: true,
-        url: window.location.href
-      });
+      try {
+        await session.handleIncomingRedirect({
+          restorePreviousSession: true,
+          url: window.location.href
+        });
+      } catch(e) {
+        console.error("Failed login: ", e)
+      }
+      
     })();
-  })
+  }, [router]);
 
   useEffect(() => {
     (async () => {
