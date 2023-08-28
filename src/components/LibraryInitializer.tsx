@@ -10,16 +10,16 @@ import {
   setThing,
   saveSolidDatasetAt
 } from "@inrupt/solid-client";
+import { useSession } from "@inrupt/solid-ui-react";
 import { RDF } from "@inrupt/vocab-common-rdf";
 import { useEffect, useState } from "react";
 import { OCOMA } from "../lib/data/vocabConstants";
-import { getSession } from "../lib/session";
 
 export default function LibraryInitializer({ setLibraryRoot }: { setLibraryRoot: (root: string) => void }) {
   const [podRootUrl, setPodRootUrl] = useState<string>();
   const [rootUrl, setRootUrl] = useState<string>();
   const [childResources, setChildResources] = useState<string[]>([]);
-  const session = getSession();
+  const { session } = useSession();
 
   useEffect(() => {
     (async () => {
@@ -35,7 +35,7 @@ export default function LibraryInitializer({ setLibraryRoot }: { setLibraryRoot:
       const dataset = await getSolidDataset(rootUrl, { fetch: session.fetch });
       setChildResources(getContainedResourceUrlAll(dataset));
     })();
-  }, [rootUrl, session.fetch, session.info.webId]);
+  }, [rootUrl, session]);
 
   return (
     <div>

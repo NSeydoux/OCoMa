@@ -1,27 +1,23 @@
-import { getSession } from "../lib/session";
+import { useSession } from "@inrupt/solid-ui-react";
+import Link from "next/link";
 
 // TODO: Make OP configurable.
 const OPENID_PROVIDER = "https://login.inrupt.com";
 
-const handleLogin = async () => {
-  return getSession().login({
-    oidcIssuer: OPENID_PROVIDER,
-    clientName: "OCoMa",
-    redirectUrl: window.location.href,
-  })
-}
-
-const handleLogout = async () => {
-  return getSession().logout();
-}
-
 const LoginButton = () => {
-  if(!getSession().info.isLoggedIn) {
-    return <button onClick={async () => await handleLogin()}>Login</button>
+  const { session } = useSession();
+  if(!session.info.isLoggedIn) {
+    return <button onClick={
+      async () => await session.login({
+        oidcIssuer: OPENID_PROVIDER,
+        clientName: "OCoMa",
+        redirectUrl: "http://localhost:3000/",
+      })
+    }>Login</button>
   }
-  return <button onClick={async () => await handleLogout()}>Logout</button>
+  return <button onClick={async () => await session.logout()}>Logout</button>
 }
 
 export const NavBar = () => {
-  return <div><LoginButton /></div>
+  return <nav><LoginButton /> <Link href="/">Home</Link> <Link href="/add">Add</Link></nav>
 }

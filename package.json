@@ -11,6 +11,7 @@
   "dependencies": {
     "@inrupt/solid-client": "^1.30.0",
     "@inrupt/solid-client-authn-browser": "^1.17.1",
+    "@inrupt/solid-ui-react": "^2.9.0",
     "@inrupt/vocab-common-rdf": "^1.0.5",
     "@next/font": "13.1.1",
     "@types/node": "18.11.18",

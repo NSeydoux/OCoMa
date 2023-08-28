@@ -1,7 +1,7 @@
 import { getSourceIri, SolidDataset } from '@inrupt/solid-client';
+import { useSession } from "@inrupt/solid-ui-react"
 import { useEffect, useState } from 'react';
 import { discoverLibraryRoot } from '../../lib/discovery';
-import { getSession } from '../../lib/session';
 import LibraryInitializer from '../LibraryInitializer';
 import BookList from '../BookList';
 
@@ -22,19 +22,16 @@ export default function ViewPage({
   library?: SolidDataset;
   setLibraryRoot: (root?: string) => void 
 }) {
+  const { session } = useSession();
   useEffect(() =>  {
     (async () => {
-      const session = getSession();
-      await session.handleIncomingRedirect({
-        restorePreviousSession: true
-      });
       setLibraryRoot(await discoverLibraryRoot(session));
     })();
-  }, [library, setLibraryRoot]);
+  }, [library, setLibraryRoot, session]);
 
   return (
     <div>
-      <h1>View all books in your library, {getSession().info.webId}</h1>
+      <h1>View all books in your library, {session.info.webId}</h1>
       <LibraryExplorer library={library} setRoot={setLibraryRoot} />
     </div>
   )
