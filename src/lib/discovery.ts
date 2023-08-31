@@ -8,10 +8,10 @@ import {
   saveSolidDatasetInContainer,
   createSolidDataset,
 } from "@inrupt/solid-client";
+import { useSession } from "@inrupt/solid-ui-react";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { RDF } from "@inrupt/vocab-common-rdf";
 import { OCOMA } from "./data/vocabConstants";
-import { getSession } from "./session";
 
 export async function discoverLibraryRoot(
   session: Session
@@ -58,7 +58,7 @@ export async function loadLibrary(
     return await saveSolidDatasetInContainer(
       libraryRoot,
       createSolidDataset(),
-      { fetch: getSession().fetch }
+      { fetch: session.fetch }
     );
   }
   if (containedResources.length > 1) {

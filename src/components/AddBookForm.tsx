@@ -1,10 +1,11 @@
 import { BARCODE_CONTAINER_ID } from "../../src/components/domConstants";
 import { Field, FieldArray, Formik } from "formik";
 import dynamic from "next/dynamic";
-import { ChangeEventHandler, useState } from "react";
+import { ChangeEventHandler, useContext, useState } from "react";
 import type { Book } from "../lib/data/books";
 import { bookToRdf } from "../lib/data/books";
-import { getSourceIri, getThingAll, setThing, SolidDataset } from "@inrupt/solid-client";
+import { getSourceIri, getThingAll, setThing } from "@inrupt/solid-client";
+import { LibraryContext } from "../contexts/libraryContext";
 
 
 // The barcode component must be loaded client-side only
@@ -149,30 +150,34 @@ const initalValues: Book = {
   }
 }
 
-export default function AddBookForm({
-  library,
-  setLibrary
-}: {
-  library: SolidDataset,
-  setLibrary: (library: SolidDataset) => void
-}) {
+export default function AddBookForm() {
   const [barcode, setBarcode] = useState<boolean>(false);
   const [isbn, setIsbn ] = useState<number>();
+  const {library, setLibrary} = useContext(LibraryContext);
   
   const handleBarCode = () => { setBarcode((prevValue) => !prevValue) };
   const handleSubmit = (book: Book) => {
+    if(library === undefined || setLibrary === undefined) {
+      return;
+    }
     const baseUrl = getSourceIri(library);
     if (baseUrl === null) {
       throw new Error("Could not find library base URL");
     }
     const bookData = bookToRdf(book, baseUrl);
     setLibrary(getThingAll(bookData).reduce(setThing, library));
+    
+    return;
   }
 
   return (<div>
     <Formik
       initialValues={initalValues}
-      onSubmit={handleSubmit}
+      onSubmit={(book, { setSubmitting, resetForm }) => {
+        handleSubmit(book); 
+        setSubmitting(false);
+        resetForm();
+      }}
     >
       {props => (
         <form onSubmit={props.handleSubmit}>
