@@ -1,38 +1,37 @@
 import { getSourceIri, SolidDataset } from '@inrupt/solid-client';
 import { useSession } from "@inrupt/solid-ui-react"
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { discoverLibraryRoot } from '../../lib/discovery';
 import LibraryInitializer from '../LibraryInitializer';
 import BookList from '../BookList';
+import { LibraryContext } from '../../contexts/libraryContext';
 
-const LibraryExplorer = ({ library, setRoot }: { library?: SolidDataset, setRoot: (root?: string) => void }) => {
+const LibraryExplorer = ({ setRoot }: { setRoot: (root?: string) => void }) => {
+  const { library } = useContext(LibraryContext);
   if (library === undefined) {
     return <LibraryInitializer setLibraryRoot={setRoot} />
   }
-  return (<div>
-    <p>Showing your library at <code>{getSourceIri(library)}</code>.</p>
-    <BookList library={library}/>
-  </div>)
+  return <BookList/>
 }
 
 export default function ViewPage({
-  library,
   setLibraryRoot
 }: {
-  library?: SolidDataset;
   setLibraryRoot: (root?: string) => void 
 }) {
   const { session } = useSession();
   useEffect(() =>  {
-    (async () => {
-      setLibraryRoot(await discoverLibraryRoot(session));
-    })();
-  }, [library, setLibraryRoot, session]);
+    discoverLibraryRoot(session)
+      .then(setLibraryRoot)
+      .catch((e) => {
+        console.error("Discovering the library root failed: ", e.toString());
+      });
+  }, [setLibraryRoot, session]);
 
   return (
     <div>
       <h1>View all books in your library, {session.info.webId}</h1>
-      <LibraryExplorer library={library} setRoot={setLibraryRoot} />
+      <LibraryExplorer setRoot={setLibraryRoot} />
     </div>
   )
 }

@@ -1,20 +1,23 @@
 import { useSession } from "@inrupt/solid-ui-react";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import AddBookForm from "../src/components/AddBookForm";
+import { LibraryContext } from "../src/contexts/libraryContext";
+import { useContext } from "react";
 
-export default function Add() {
+export default function AddPage() {
   const { session } = useSession();
-  const router = useRouter();
-  const [isLoggedIn, setLoggedIn] = useState<boolean>(session.info.isLoggedIn);
-
-  useEffect(() => {
+  const {library } = useContext(LibraryContext);
   
-  }, [router, session]);
+  if (!session.info.isLoggedIn) {
+    return <div>Please log in to add a book to your library.</div>
+  }
 
   return (
-    <>
-      <h1>Welcome to OCoMa</h1>
-      { isLoggedIn === false ? "Not logged in": `Logged in as ${session.info.webId}`}
-    </>
+    <div>
+      <h1>Add a book to your library, {session.info.webId}</h1>
+      { library !== undefined 
+        ? <AddBookForm/>
+        : <p>To be add books to your library, please define a library root first.</p>
+      }
+    </div>
   )
 }

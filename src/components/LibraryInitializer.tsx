@@ -8,10 +8,11 @@ import {
   getThing,
   addIri,
   setThing,
-  saveSolidDatasetAt
+  saveSolidDatasetAt,
+  addStringNoLocale
 } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
-import { RDF } from "@inrupt/vocab-common-rdf";
+import { RDF, RDFS } from "@inrupt/vocab-common-rdf";
 import { useEffect, useState } from "react";
 import { OCOMA } from "../lib/data/vocabConstants";
 
