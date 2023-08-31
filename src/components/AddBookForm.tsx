@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { ChangeEventHandler, useContext, useState } from "react";
 import type { Book } from "../lib/data/books";
 import { bookToRdf } from "../lib/data/books";
-import { getSourceIri, getThingAll, setThing, SolidDataset } from "@inrupt/solid-client";
+import { getSourceIri, getThingAll, setThing } from "@inrupt/solid-client";
 import { LibraryContext } from "../contexts/libraryContext";
 
 

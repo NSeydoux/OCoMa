@@ -1,4 +1,4 @@
-import { SolidDataset, asUrl, getThingAll, getUrlAll } from "@inrupt/solid-client";
+import { asUrl, getThingAll, getUrlAll } from "@inrupt/solid-client";
 import { RDF } from "@inrupt/vocab-common-rdf";
 import { SCHEMA } from "../lib/data/vocabConstants";
 import { rdfToBook } from "../lib/data/books";
