@@ -11,7 +11,8 @@ const LoginButton = () => {
       async () => await session.login({
         oidcIssuer: OPENID_PROVIDER,
         clientName: "OCoMa",
-        redirectUrl: "http://localhost:3000/",
+        // redirectUrl: "http://localhost:3000/",
+        redirectUrl: window.location.href,
       })
     }>Login</button>
   }
