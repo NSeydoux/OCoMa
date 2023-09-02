@@ -1,18 +1,13 @@
+"use client";
+
 import { BARCODE_CONTAINER_ID } from "../../src/components/domConstants";
 import { Field, FieldArray, Formik } from "formik";
-import dynamic from "next/dynamic";
 import { ChangeEventHandler, useContext, useState } from "react";
 import type { Book } from "../lib/data/books";
 import { bookToRdf } from "../lib/data/books";
 import { getSourceIri, getThingAll, setThing } from "@inrupt/solid-client";
 import { LibraryContext } from "../contexts/libraryContext";
-
-
-// The barcode component must be loaded client-side only
-const BarcodeReader = dynamic(
-  () => import("./barcode"),
-  { ssr: false }
-);
+import BarcodeReader from "./barcode";
 
 const BookTitleField = ({
   handleChange,
@@ -67,8 +62,8 @@ const IsbnField = ({
 }: { 
   handleChange: ChangeEventHandler,
   isbn: number | undefined,
-  handleBarCode: () => void}
-) => {
+  handleBarCode: () => void
+}) => {
   return (
     <label htmlFor="isbn">
       <button type="button" onClick={() => handleBarCode()}>ISBN: </button>
@@ -76,7 +71,7 @@ const IsbnField = ({
         type="text"
         name="isbn"
         id="isbn"
-        onChange={handleChange}
+        onChange={(e) => {console.log("Changing ISBN: ", JSON.stringify(e)); handleChange(e)}}
         value={isbn}
       />
     </label>
