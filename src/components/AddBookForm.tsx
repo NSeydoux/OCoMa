@@ -1,18 +1,13 @@
+"use client";
+
 import { BARCODE_CONTAINER_ID } from "../../src/components/domConstants";
-import { Field, FieldArray, Formik } from "formik";
-import dynamic from "next/dynamic";
+import { Field, FieldArray, Formik, useFormikContext } from "formik";
 import { ChangeEventHandler, useContext, useState } from "react";
 import type { Book } from "../lib/data/books";
 import { bookToRdf } from "../lib/data/books";
 import { getSourceIri, getThingAll, setThing } from "@inrupt/solid-client";
 import { LibraryContext } from "../contexts/libraryContext";
-
-
-// The barcode component must be loaded client-side only
-const BarcodeReader = dynamic(
-  () => import("./barcode"),
-  { ssr: false }
-);
+import BarcodeReader from "./barcode";
 
 const BookTitleField = ({
   handleChange,
@@ -63,15 +58,18 @@ const LangTagField = ({
 const IsbnField = ({
   handleChange,
   isbn,
-  handleBarCode
 }: { 
   handleChange: ChangeEventHandler,
   isbn: number | undefined,
-  handleBarCode: () => void}
-) => {
+}) => {
+  const [scanEnabled, setScanEnabled] = useState<boolean>(false);
+  const {
+    setFieldValue,
+  } = useFormikContext()
   return (
     <label htmlFor="isbn">
-      <button type="button" onClick={() => handleBarCode()}>ISBN: </button>
+      <button type="button" onClick={() => setScanEnabled((prev) => !prev)}>ISBN: </button>
+      <BarcodeReader enabled={scanEnabled} onDetectedCallback={(value) => { setFieldValue("isbn", value) }}/>
       <input
         type="text"
         name="isbn"
@@ -151,11 +149,8 @@ const initalValues: Book = {
 }
 
 export default function AddBookForm() {
-  const [barcode, setBarcode] = useState<boolean>(false);
-  const [isbn, setIsbn ] = useState<number>();
   const {library, setLibrary} = useContext(LibraryContext);
   
-  const handleBarCode = () => { setBarcode((prevValue) => !prevValue) };
   const handleSubmit = (book: Book) => {
     if(library === undefined || setLibrary === undefined) {
       return;
@@ -193,8 +188,7 @@ export default function AddBookForm() {
           <br />
           <IsbnField
             handleChange={props.handleChange}
-            isbn={isbn}
-            handleBarCode={handleBarCode}
+            isbn={props.values.isbn}
           />
           {props.errors.isbn && props.touched.isbn}
           <br />
@@ -215,6 +209,5 @@ export default function AddBookForm() {
     </Formik>
     {/* The following must be present for the BarcodeReader component to anchor into. */}
     <div id={BARCODE_CONTAINER_ID}></div>
-    <BarcodeReader enabled={barcode} onDetectedCallback={setIsbn}/>
   </div>)
 }
