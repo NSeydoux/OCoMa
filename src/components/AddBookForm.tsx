@@ -1,7 +1,7 @@
 "use client";
 
 import { BARCODE_CONTAINER_ID } from "../../src/components/domConstants";
-import { Field, FieldArray, Formik } from "formik";
+import { Field, FieldArray, Formik, useFormikContext } from "formik";
 import { ChangeEventHandler, useContext, useState } from "react";
 import type { Book } from "../lib/data/books";
 import { bookToRdf } from "../lib/data/books";
@@ -64,14 +64,19 @@ const IsbnField = ({
   isbn: number | undefined,
   handleBarCode: () => void
 }) => {
+  const [scanEnabled, setScanEnabled] = useState<boolean>(false);
+  const {
+    setFieldValue,
+  } = useFormikContext()
   return (
     <label htmlFor="isbn">
-      <button type="button" onClick={() => handleBarCode()}>ISBN: </button>
+      <button type="button" onClick={() => setScanEnabled((prev) => !prev)}>ISBN: </button>
+      <BarcodeReader enabled={scanEnabled} onDetectedCallback={(value) => { setFieldValue("isbn", value) }}/>
       <input
         type="text"
         name="isbn"
         id="isbn"
-        onChange={(e) => {console.log("Changing ISBN: ", JSON.stringify(e)); handleChange(e)}}
+        onChange={handleChange}
         value={isbn}
       />
     </label>
@@ -146,11 +151,8 @@ const initalValues: Book = {
 }
 
 export default function AddBookForm() {
-  const [barcode, setBarcode] = useState<boolean>(false);
-  const [isbn, setIsbn ] = useState<number>();
   const {library, setLibrary} = useContext(LibraryContext);
   
-  const handleBarCode = () => { setBarcode((prevValue) => !prevValue) };
   const handleSubmit = (book: Book) => {
     if(library === undefined || setLibrary === undefined) {
       return;
@@ -210,6 +212,5 @@ export default function AddBookForm() {
     </Formik>
     {/* The following must be present for the BarcodeReader component to anchor into. */}
     <div id={BARCODE_CONTAINER_ID}></div>
-    <BarcodeReader enabled={barcode} onDetectedCallback={setIsbn}/>
   </div>)
 }
