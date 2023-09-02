@@ -1,34 +1,31 @@
 import { useSession } from "@inrupt/solid-ui-react";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
-
-export const getServerSideProps: GetServerSideProps<{
-  deployUrl: string
-}> = async () => {
-  return { props: { deployUrl: process.env.VERCEL_URL ?? "http://localhost:3000/" } }
-}
+import { useContext } from "react";
+import { DeploymentContext } from "../contexts/deploymentContext";
 
 // TODO: Make OP configurable.
 const OPENID_PROVIDER = "https://login.inrupt.com";
 
-const LoginButton = ({ deployUrl }: { deployUrl: string }) => {
+const LoginButton = () => {
   const { session } = useSession();
+  const { deploymentUrl } = useContext(DeploymentContext);
   if(!session.info.isLoggedIn) {
     return <button onClick={
       async () => await session.login({
         oidcIssuer: OPENID_PROVIDER,
         clientName: "OCoMa",
-        redirectUrl: deployUrl,
+        redirectUrl: deploymentUrl,
       })
     }>Login</button>
   }
   return <button onClick={async () => await session.logout()}>Logout</button>
 }
 
-export const NavBar = ({ deployUrl }: { deployUrl: string }) => {
+export const NavBar = () => {
   return (
     <nav>
-      <LoginButton deployUrl={ deployUrl } />
+      <LoginButton/>
       <Link href="/">Home</Link>
       <Link href="/add">Add</Link>
     </nav>
