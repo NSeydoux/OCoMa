@@ -58,11 +58,9 @@ const LangTagField = ({
 const IsbnField = ({
   handleChange,
   isbn,
-  handleBarCode
 }: { 
   handleChange: ChangeEventHandler,
   isbn: number | undefined,
-  handleBarCode: () => void
 }) => {
   const [scanEnabled, setScanEnabled] = useState<boolean>(false);
   const {
@@ -190,8 +188,7 @@ export default function AddBookForm() {
           <br />
           <IsbnField
             handleChange={props.handleChange}
-            isbn={isbn}
-            handleBarCode={handleBarCode}
+            isbn={props.values.isbn}
           />
           {props.errors.isbn && props.touched.isbn}
           <br />
