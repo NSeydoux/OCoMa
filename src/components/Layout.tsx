@@ -3,9 +3,11 @@ import { NavBar } from './navbar'
 import { SessionProvider, useSession } from "@inrupt/solid-ui-react"
 import { useRouter } from 'next/router';
 
-import { LibraryContext } from "../contexts/libraryContext";
 import { useEffect, useState } from 'react';
 import { SolidDataset, getSourceIri, saveSolidDatasetAt, hasResourceInfo } from '@inrupt/solid-client';
+
+import { LibraryContext } from "../contexts/libraryContext";
+import { DeploymentContext } from "../contexts/deploymentContext";
 
 const Main = (
   { children }: { children: any } 
@@ -47,6 +49,7 @@ const Main = (
  
 export default function Layout({ children }: any) {
   const router = useRouter();
+  const [deploymentUrl, setDeploymentUrl] = useState<string>();
   return (
     <>
       <Head>
@@ -54,14 +57,17 @@ export default function Layout({ children }: any) {
         <meta name="description" content="An Open Comic books Manager" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <SessionProvider 
-        restorePreviousSession={ true }
-        onSessionRestore={
-          (url) => { router.push(url); }
-      }>
-        <NavBar />
-        <Main>{children}</Main>
-      </SessionProvider>
+      <DeploymentContext.Provider value={{ deploymentUrl, setDeploymentUrl }}>
+        <SessionProvider 
+          restorePreviousSession={ true }
+          onSessionRestore={
+            (url) => { router.push(url); }
+        }>
+          <NavBar />
+          <Main>{children}</Main>
+        </SessionProvider>
+      </DeploymentContext.Provider>
+      
     </>
   )
 }
