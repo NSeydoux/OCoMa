@@ -1,0 +1,36 @@
+@prefix : </books/series> .
+@prefix cc: <http://creativecommons.org/ns#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix codp: <http://w3id.org/cri/ns/codp/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sche: <https://schema.org/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix obm: <http://w3id.org/cri/ns/obema/> .
+@prefix cbo: <http://comicmeta.org/cbo/> .
+@prefix schema: <https://schema.org/> .
+
+:Vives a foaf:Person;
+  foaf:name "Bastien Vivès".
+
+:Salainville a foaf:Person;
+  foaf:name "Mickaël Salainville".
+
+:Balak a foaf:Person;
+  foaf:name "Balak".
+
+:Lastman a cbo:Series;
+    cbo:seriesTitle "Lastman"@fr;
+    # dc:creator :Vives, :Salainville, :Balak ;
+    codp:isFinished "true"^^xsd:boolean.
+
+:Lastman1 a schema:PublicationIssue;
+    dc:title "Lastman 1"@fr ;
+    dc:creator :Vives, :Salainville, :Balak ;
+    cbo:isbn 123456 ;
+    cbo:isueNumber 1 ;
+    cbo:series :Lastman .
