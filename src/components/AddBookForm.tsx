@@ -4,7 +4,7 @@ import { BARCODE_CONTAINER_ID } from "../../src/components/domConstants";
 import { Field, FieldArray, Formik, useFormikContext } from "formik";
 import { ChangeEventHandler, useContext, useState } from "react";
 import type { Book } from "../lib/data/books";
-import { bookToRdf } from "../lib/data/books";
+import { addBookToDataset, bookToRdf } from "../lib/data/books";
 import { getSourceIri, getThingAll, setThing } from "@inrupt/solid-client";
 import { LibraryContext } from "../contexts/libraryContext";
 import BarcodeReader from "./barcode";
@@ -155,14 +155,7 @@ export default function AddBookForm() {
     if(library === undefined || setLibrary === undefined) {
       return;
     }
-    const baseUrl = getSourceIri(library);
-    if (baseUrl === null) {
-      throw new Error("Could not find library base URL");
-    }
-    const bookData = bookToRdf(book, baseUrl);
-    setLibrary(getThingAll(bookData).reduce(setThing, library));
-    
-    return;
+    setLibrary(addBookToDataset(book, library));
   }
 
   return (<div>

@@ -1,8 +1,7 @@
-import { SolidDataset, buildThing, asIri, setThing, createSolidDataset, getStringByLocaleAll, getThing, getSourceUrl, getInteger, getUrlAll, getStringNoLocale, ThingPersisted, getUrl, getStringWithLocale } from "@inrupt/solid-client";
+import { SolidDataset, buildThing, asIri, setThing, createSolidDataset, getStringByLocaleAll, getThing, getSourceUrl, getInteger, getUrlAll, getStringNoLocale, ThingPersisted, getUrl, getStringWithLocale, getSourceIri, getThingAll, removeThing, getIntegerAll, asUrl, removeUrl } from "@inrupt/solid-client";
 import { FOAF, DCTERMS, RDF } from "@inrupt/vocab-common-rdf";
 import { v4 } from "uuid";
 import { CBO, SCHEMA } from "./vocabConstants";
-import { getIn } from "formik";
 
 export type Book = {
   title: string,
@@ -101,4 +100,33 @@ export function rdfToBook(data: SolidDataset, bookUrl: string): Book {
     authors,
     series
   }
+}
+
+export function addBookToDataset(book: Book, library: SolidDataset): SolidDataset {
+  const baseUrl = getSourceIri(library);
+  if (baseUrl === null) {
+    throw new Error("Could not find library base URL");
+  }
+  const bookData = bookToRdf(book, baseUrl);
+  // Return the library updated with data about the new book.
+  return getThingAll(bookData).reduce(setThing, library);
+}
+
+export function removeBookFromDataset(book: Book, library: SolidDataset): SolidDataset {
+  const baseUrl = getSourceIri(library);
+  if (baseUrl === null) {
+    throw new Error("Could not find library base URL");
+  }
+  // const bookData = bookToRdf(book, baseUrl);
+  const bookThings = getThingAll(library).filter(
+    (candidateThing) => getIntegerAll(candidateThing, CBO.properties.isbn).includes(book.isbn)
+  );
+  if (bookThings.length === 0) {
+    throw new Error(`Could not find book with ISBN ${book.isbn} for deletion.`);
+  }
+  if (bookThings.length > 1) {
+    console.warn(`More than one book are registered with ISBN ${book.isbn}.`);
+  }
+  // Return the library updated without data about the deleted book.
+  return bookThings.reduce(removeThing, library);
 }
