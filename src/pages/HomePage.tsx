@@ -1,11 +1,13 @@
+"use client"
+
 import { useSession } from "@inrupt/solid-ui-react";
 
 import { useContext, useEffect, useState } from "react";
-import ViewPage from "../src/components/pages/ViewPage";
-import { loadLibrary } from '../src/lib/discovery';
-import { LibraryContext } from '../src/contexts/libraryContext';
+import ViewPage from "./ViewPage";
+import { loadLibrary } from '../lib/discovery';
+import { LibraryContext } from '../contexts/libraryContext';
 import { GetServerSideProps } from "next";
-import { DeploymentContext } from "../src/contexts/deploymentContext";
+import { DeploymentContext } from "../contexts/deploymentContext";
 
 export const getServerSideProps: GetServerSideProps<{
   deployUrl: string

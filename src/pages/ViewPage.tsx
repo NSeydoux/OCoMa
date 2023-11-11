@@ -1,10 +1,12 @@
+"use client"
+
 import { getSourceIri, SolidDataset } from '@inrupt/solid-client';
 import { useSession } from "@inrupt/solid-ui-react"
 import { useContext, useEffect, useState } from 'react';
-import { discoverLibraryRoot } from '../../lib/discovery';
-import LibraryInitializer from '../LibraryInitializer';
-import BookList from '../BookList';
-import { LibraryContext } from '../../contexts/libraryContext';
+import { discoverLibraryRoot } from '../lib/discovery';
+import LibraryInitializer from '../components/LibraryInitializer';
+import BookList from '../components/BookList';
+import { LibraryContext } from '../contexts/libraryContext';
 
 const LibraryExplorer = ({ setRoot }: { setRoot: (root?: string) => void }) => {
   const { library } = useContext(LibraryContext);
