@@ -1,3 +1,5 @@
+"use client";
+
 import { SolidClientError, SolidDataset, asUrl, getThingAll, getUrlAll } from "@inrupt/solid-client";
 import { RDF } from "@inrupt/vocab-common-rdf";
 import { SCHEMA } from "../lib/data/vocabConstants";

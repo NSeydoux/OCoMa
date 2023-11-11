@@ -1,6 +1,8 @@
+"use client"
+
 import { useSession } from "@inrupt/solid-ui-react";
-import AddBookForm from "../src/components/AddBookForm";
-import { LibraryContext } from "../src/contexts/libraryContext";
+import AddBookForm from "../components/AddBookForm";
+import { LibraryContext } from "../contexts/libraryContext";
 import { useContext } from "react";
 
 export default function AddPage() {
