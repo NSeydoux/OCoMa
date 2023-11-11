@@ -1,0 +1,2 @@
+- Color palette: https://colorhunt.co/palette/b1b2ffaac4ffd2daffeef1ff
+- Icon: gauffrier
