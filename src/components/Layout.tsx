@@ -1,7 +1,9 @@
+"use client";
+
 import Head from 'next/head'
 import { NavBar } from './navbar'
 import { SessionProvider, useSession } from "@inrupt/solid-ui-react"
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { useEffect, useState } from 'react';
 import { SolidDataset, getSourceIri, saveSolidDatasetAt, hasResourceInfo } from '@inrupt/solid-client';

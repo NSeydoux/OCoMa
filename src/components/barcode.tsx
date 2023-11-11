@@ -1,3 +1,5 @@
+"use client";
+
 import { runDetection } from "../lib/barcode"
 
 let scannerInterruptionCallback = () => {};
