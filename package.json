@@ -20,7 +20,7 @@
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
     "formik": "^2.2.9",
-    "next": "13.5.4",
+    "next": "^14.0.2",
     "quagga": "^0.12.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
