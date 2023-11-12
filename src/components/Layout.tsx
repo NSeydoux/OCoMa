@@ -1,6 +1,5 @@
 "use client";
 
-import Head from 'next/head'
 import { NavBar } from './navbar'
 import { SessionProvider, useSession } from "@inrupt/solid-ui-react"
 import { useRouter } from 'next/navigation';
@@ -10,6 +9,19 @@ import { SolidDataset, getSourceIri, saveSolidDatasetAt, hasResourceInfo } from 
 
 import { LibraryContext } from "../contexts/libraryContext";
 import { DeploymentContext } from "../contexts/deploymentContext";
+import LoginButton from './LoginButton';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#001df7",
+     },
+    secondary: {
+      main: "#f7da00"
+    }
+  },
+});
 
 const Main = (
   { children }: { children: any } 
@@ -40,7 +52,7 @@ const Main = (
   }, [library, session]);
 
   if (!session.info.isLoggedIn) {
-    return <main>Please log in.</main>
+    return <main><LoginButton /></main>
   }
   return (
     <LibraryContext.Provider value={{ library, setLibrary }}>
@@ -53,12 +65,7 @@ export default function Layout({ children }: any) {
   const router = useRouter();
   const [deploymentUrl, setDeploymentUrl] = useState<string>();
   return (
-    <>
-      <Head>
-        <title>OCoMa</title>
-        <meta name="description" content="An Open Comic books Manager" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
+    <ThemeProvider theme={theme}>
       <DeploymentContext.Provider value={{ deploymentUrl, setDeploymentUrl }}>
         <SessionProvider 
           restorePreviousSession={ true }
@@ -69,7 +76,6 @@ export default function Layout({ children }: any) {
           <Main>{children}</Main>
         </SessionProvider>
       </DeploymentContext.Provider>
-      
-    </>
+    </ThemeProvider>
   )
 }

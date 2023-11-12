@@ -8,6 +8,7 @@ import { loadLibrary } from '../lib/discovery';
 import { LibraryContext } from '../contexts/libraryContext';
 import { DeploymentContext } from "../contexts/deploymentContext";
 
+
 export default function Home({ deployUrl }: { deployUrl: string }) {
   const { session } = useSession();
   const [libraryRoot, setLibraryRoot] = useState<string>();
@@ -26,10 +27,8 @@ export default function Home({ deployUrl }: { deployUrl: string }) {
       });
   }, [libraryRoot, session, setLibrary])
 
-  return (
-    <>
-      <h1>Welcome to OCoMa</h1>
-      <ViewPage setLibraryRoot={setLibraryRoot} />
-    </>
-  )
+  if (!session.info.isLoggedIn) {
+    return <></>;
+  }
+  return <ViewPage setLibraryRoot={setLibraryRoot} />
 }

@@ -1,0 +1,7 @@
+.ocoma-nav a {
+  text-decoration: none;
+}
+
+.nav-active {
+  font-weight: bolder;
+}
