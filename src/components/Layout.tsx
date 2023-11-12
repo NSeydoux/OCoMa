@@ -11,8 +11,6 @@ import { LibraryContext } from "../contexts/libraryContext";
 import { DeploymentContext } from "../contexts/deploymentContext";
 import LoginButton from './LoginButton';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-// Load the app CSS.
-import "../style/style.css";
 
 const theme = createTheme({
   palette: {

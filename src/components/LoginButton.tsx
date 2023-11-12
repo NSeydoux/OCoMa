@@ -4,6 +4,7 @@ import { useSession } from "@inrupt/solid-ui-react";
 import { useContext } from "react";
 import Button from '@mui/material/Button';
 import { DeploymentContext } from "../contexts/deploymentContext";
+import style from "./LoginButton.module.css";
 
 // TODO: Make OP configurable.
 const OPENID_PROVIDER = "https://login.inrupt.com";
@@ -20,6 +21,6 @@ export default function LoginButton() {
         })
       }
       variant="contained"
-      className="callToAction"
+      className={style.callToAction}
     >Login</Button>
 }
