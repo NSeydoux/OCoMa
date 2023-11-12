@@ -28,7 +28,7 @@ export default function Home({ deployUrl }: { deployUrl: string }) {
   }, [libraryRoot, session, setLibrary])
 
   if (!session.info.isLoggedIn) {
-    throw new Error("The homepage requires authenticated users.")
+    return <></>;
   }
   return <ViewPage setLibraryRoot={setLibraryRoot} />
 }
