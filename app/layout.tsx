@@ -1,5 +1,7 @@
 import { Metadata } from 'next'
-import Layout from '../src/components/Layout'; 
+import Layout from '../src/components/Layout';
+// Load the app CSS.
+import "../style/style.css";
 
 export const metadata: Metadata = {
   title: 'OCoMa',
@@ -15,7 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body><Layout>{children}</Layout></body>
+      <body>
+        <Layout>{children}</Layout>
+      </body>
     </html>
   )
 }
