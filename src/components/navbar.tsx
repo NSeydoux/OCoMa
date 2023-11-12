@@ -1,33 +1,40 @@
-import { useSession } from "@inrupt/solid-ui-react";
-import { GetServerSideProps } from "next";
-import Link from "next/link";
-import { useContext } from "react";
-import { DeploymentContext } from "../contexts/deploymentContext";
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-// TODO: Make OP configurable.
-const OPENID_PROVIDER = "https://login.inrupt.com";
+const pages = [{ href: "/add", label: "Add" }];
 
-const LoginButton = () => {
-  const { session } = useSession();
-  const { deploymentUrl } = useContext(DeploymentContext);
-  if(!session.info.isLoggedIn) {
-    return <button onClick={
-      async () => await session.login({
-        oidcIssuer: OPENID_PROVIDER,
-        clientName: "OCoMa",
-        redirectUrl: deploymentUrl,
-      })
-    }>Login</button>
-  }
-  return <button onClick={async () => await session.logout()}>Logout</button>
-}
+function ResponsiveAppBar() {
+  const pathName = usePathname();
 
-export const NavBar = () => {
   return (
     <nav>
-      <LoginButton/>
-      <Link href="/">Home</Link>
-      <Link href="/add">Add</Link>
+      <AppBar position="static">
+        <Container maxWidth="xl">
+          <Toolbar>
+            <Link href="/"><Typography color="white">OCoMa</Typography></Link>
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex' } }}>
+              {pages.map((page) => (
+                <Link key={page.href} href={page.href}>
+                  <Button
+                    key={page.href}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                    className={ pathName === page.href ? "nav-active" : "nav-inactive"}
+                  >
+                    {page.label}
+                  </Button>
+                </Link>
+              ))}
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
     </nav>
   );
 }
+export const NavBar = ResponsiveAppBar ;
