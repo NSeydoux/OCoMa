@@ -1,7 +1,5 @@
 import { Metadata } from 'next'
 import Layout from '../src/components/Layout';
-// Load the app CSS.
-import "../style/style.css";
 
 export const metadata: Metadata = {
   title: 'OCoMa',
