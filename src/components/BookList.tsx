@@ -6,6 +6,7 @@ import { SCHEMA } from "../lib/data/vocabConstants";
 import { Book, rdfToBook, removeBookFromDataset } from "../lib/data/books";
 import { useContext } from "react";
 import { LibraryContext } from "../contexts/libraryContext";
+import style from "./Booklist.module.css";
 
 const seeMore = (book: Book) => {
   console.log("See more about ", book.isbn);
@@ -35,40 +36,27 @@ export default function BookList() {
     .map((book) => rdfToBook(library, asUrl(book)))
     .map((bookData) => (
       <tr key={bookData.isbn}>
-        <td>{bookData.title}</td>
-        <td>{bookData.authors.reduce((prev, cur) => prev === "" ? cur : `${cur}, ${prev}`, "")}</td>
-        <td>{bookData.series !== undefined ? `${bookData.series.name} (T${bookData.series.index})` : ""}</td>
-        <td><SeeMoreButton book={bookData}/><RemoveButton book={bookData}/></td>
+        <td aria-label="Titre">{bookData.title}</td>
+        <td aria-label="Auteurs">{bookData.authors.reduce((prev, cur) => prev === "" ? cur : `${cur}, ${prev}`, "")}</td>
+        <td aria-label="Série">{bookData.series !== undefined ? `${bookData.series.name} (T${bookData.series.index})` : ""}</td>
+        <td aria-label=""><SeeMoreButton book={bookData}/><RemoveButton book={bookData}/></td>
       </tr>
     ));
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Titre</th>
-          <th>Auteur(s)</th>
-          <th>Série</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {bookList}
-      </tbody>
-    </table>
+    <div className={ style.bookTableContainer }>
+      <table className={ style.bookTable }>
+        <thead>
+          <tr>
+            <th>Titre</th>
+            <th>Auteur(s)</th>
+            <th>Série</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookList}
+        </tbody>
+      </table>
+    </div>
   );
 };
-
-<table>
-  <thead>
-    <tr>
-      <th colSpan={2}>The table header</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>The table body</td>
-      <td>with two columns</td>
-    </tr>
-  </tbody>
-</table>
-
