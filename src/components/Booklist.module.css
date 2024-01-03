@@ -1,0 +1,56 @@
+.bookTableContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.bookTable {
+    border: solid black 1px ;
+    margin: 1rem;
+    border-collapse: collapse;
+}
+
+.bookTable thead th {
+    background-color: #001df7;
+    color: white;
+}
+
+.bookTable tr:nth-child(even){
+    background-color: #eae7fa;
+}
+
+/* .bookTable tr:hover {
+    background-color: #c8bcff;
+} */
+
+.bookTable td, .bookTable th {
+    border-bottom: solid black 1px;
+    margin: 1rem;
+    padding-right: 2rem;
+    padding-left: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    text-align: left;
+}
+
+/* Thanks to https://medium.com/allenhwkim/mobile-friendly-table-b0cb066dbc0e */
+@media screen and (max-width: 600px) {
+    .bookTable thead {
+      display: none;
+    }  
+    
+    .bookTable td {
+      display: flex;
+      border-bottom: none;
+    }
+
+    .bookTable tr {
+        border-bottom: solid black 1px;
+    }
+    
+    .bookTable td::before {
+      content: attr(aria-label);
+      font-weight: bold;
+      width: 120px;
+      min-width: 120px;
+    }
+  }

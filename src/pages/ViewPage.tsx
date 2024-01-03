@@ -31,9 +31,6 @@ export default function ViewPage({
   }, [setLibraryRoot, session]);
 
   return (
-    <div>
-      <h1>View all books in your library, {session.info.webId}</h1>
       <LibraryExplorer setRoot={setLibraryRoot} />
-    </div>
   )
 }
