@@ -90,7 +90,12 @@ const IsbnField = ({
   return (
     <label htmlFor="isbn">
       <button type="button" onClick={() => setScanEnabled((prev) => !prev)}>ISBN: </button>
-      <BarcodeReader enabled={scanEnabled} onDetectedCallback={(value) => { setFieldValue("isbn", value) }}/>
+      <BarcodeReader enabled={scanEnabled} onDetectedCallback={
+        (value) => { 
+          setFieldValue("isbn", value);
+          setScanEnabled(false);
+        }
+      }/>
       <input
         type="text"
         name="isbn"
