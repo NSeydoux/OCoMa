@@ -1,9 +1,9 @@
 import Quagga from "quagga";
-import { BARCODE_CONTAINER_ID } from "../components/domConstants"
+import { BARCODE_VIEWER_ID } from "../components/domConstants"
 
 function stopScanning() {
   Quagga.stop();
-  const container = document.querySelector(`#${BARCODE_CONTAINER_ID}`);
+  const container = document.querySelector(`#${BARCODE_VIEWER_ID}`);
   if(container !== null) {
     Array.from(container.childNodes).forEach((child) => {
       container.removeChild(child);
@@ -21,7 +21,7 @@ export function runDetection(onDetectedCallback) {
         facingMode: "environment",
         aspectRatio: {min: 1, max: 2}
     },
-      target: document.querySelector(`#${BARCODE_CONTAINER_ID}`)
+      target: document.querySelector(`#${BARCODE_VIEWER_ID}`)
     },
     locator: {
       patchSize: "medium",
