@@ -9,6 +9,8 @@ import { getSourceIri, getThingAll, setThing } from "@inrupt/solid-client";
 import { LibraryContext } from "../contexts/libraryContext";
 import BarcodeReader from "./barcode";
 
+import style from "./AddBookForm.module.css";
+
 const BookTitleField = ({
   handleChange,
   title
@@ -39,7 +41,7 @@ const LangTagField = ({
 }) => {
   return (
     <label htmlFor="langTag">
-      Title:
+      Langue:
       <select
         name="langTag"
         id="langTag"
@@ -158,7 +160,7 @@ export default function AddBookForm() {
     setLibrary(addBookToDataset(book, library));
   }
 
-  return (<div>
+  return (<div className={ style.addBookFormContainer }>
     <Formik
       initialValues={initalValues}
       onSubmit={(book, { setSubmitting, resetForm }) => {
@@ -168,7 +170,7 @@ export default function AddBookForm() {
       }}
     >
       {props => (
-        <form onSubmit={props.handleSubmit}>
+        <form onSubmit={props.handleSubmit} className={ style.addBookForm }>
           <BookTitleField
             handleChange={props.handleChange}
             title={props.values.title}
