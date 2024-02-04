@@ -15,8 +15,8 @@ export default function LoginButton() {
     return <Button 
       onClick={
         async () => await session.login({
+          clientId: new URL("/id", deploymentUrl).href,
           oidcIssuer: OPENID_PROVIDER,
-          clientName: "OCoMa",
           redirectUrl: deploymentUrl,
         })
       }
