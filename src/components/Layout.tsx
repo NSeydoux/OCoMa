@@ -61,12 +61,11 @@ const Main = (
   );
 }
  
-export default function Layout({ children }: any) {
+export default function Layout({ children, deploymentUrl }: any) {
   const router = useRouter();
-  const [deploymentUrl, setDeploymentUrl] = useState<string>();
   return (
     <ThemeProvider theme={theme}>
-      <DeploymentContext.Provider value={{ deploymentUrl, setDeploymentUrl }}>
+      <DeploymentContext.Provider value={{ deploymentUrl }}>
         <SessionProvider 
           restorePreviousSession={ true }
           onSessionRestore={

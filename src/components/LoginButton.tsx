@@ -15,8 +15,11 @@ export default function LoginButton() {
     return <Button 
       onClick={
         async () => await session.login({
+          // Default to dynamic client registration when using a local deployment.
+          clientId: deploymentUrl?.includes("localhost") 
+            ? undefined
+            : new URL("/id", deploymentUrl).href,
           oidcIssuer: OPENID_PROVIDER,
-          clientName: "OCoMa",
           redirectUrl: deploymentUrl,
         })
       }
