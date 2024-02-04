@@ -10,6 +10,7 @@ import { DeploymentContext } from "../contexts/deploymentContext";
 
 
 export default function Home({ deployUrl }: { deployUrl: string }) {
+  console.log("Home rendered")
   const { session } = useSession();
   const [libraryRoot, setLibraryRoot] = useState<string>();
   const { setLibrary } = useContext(LibraryContext);

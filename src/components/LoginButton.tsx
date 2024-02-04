@@ -12,6 +12,7 @@ const OPENID_PROVIDER = "https://login.inrupt.com";
 export default function LoginButton() {
   const { session } = useSession();
   const { deploymentUrl } = useContext(DeploymentContext);
+  console.log("Deployment URL: ", deploymentUrl);
     return <Button 
       onClick={
         async () => await session.login({
