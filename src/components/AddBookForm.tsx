@@ -1,13 +1,15 @@
 "use client";
 
-import { BARCODE_CONTAINER_ID } from "../../src/components/domConstants";
+import { BARCODE_VIEWER_ID } from "../../src/components/domConstants";
 import { Field, FieldArray, Formik, useFormikContext } from "formik";
-import { ChangeEventHandler, useContext, useState } from "react";
+import { ChangeEventHandler, useContext, useEffect, useState } from "react";
 import type { Book } from "../lib/data/books";
 import { addBookToDataset, bookToRdf } from "../lib/data/books";
 import { getSourceIri, getThingAll, setThing } from "@inrupt/solid-client";
 import { LibraryContext } from "../contexts/libraryContext";
 import BarcodeReader from "./barcode";
+
+import style from "./AddBookForm.module.css";
 
 const BookTitleField = ({
   handleChange,
@@ -39,7 +41,7 @@ const LangTagField = ({
 }) => {
   return (
     <label htmlFor="langTag">
-      Title:
+      Langue:
       <select
         name="langTag"
         id="langTag"
@@ -66,10 +68,34 @@ const IsbnField = ({
   const {
     setFieldValue,
   } = useFormikContext()
+
+  useEffect(() => {
+    const modal = document.getElementById("barcode-modal");
+    const modalContainer = document.getElementById("barcode-container");
+    if(modal === null) {
+      return;
+    }
+    if (scanEnabled) {
+      modal.style.display = "block";
+      window.onclick = (event) => {
+        if (event.target === modal || event.target === modalContainer) {
+          setScanEnabled(false);
+        }
+      }
+    } else {
+      modal.style.display = "none";
+    }
+  }, [scanEnabled]);
+
   return (
     <label htmlFor="isbn">
       <button type="button" onClick={() => setScanEnabled((prev) => !prev)}>ISBN: </button>
-      <BarcodeReader enabled={scanEnabled} onDetectedCallback={(value) => { setFieldValue("isbn", value) }}/>
+      <BarcodeReader enabled={scanEnabled} onDetectedCallback={
+        (value) => { 
+          setFieldValue("isbn", value);
+          setScanEnabled(false);
+        }
+      }/>
       <input
         type="text"
         name="isbn"
@@ -158,7 +184,7 @@ export default function AddBookForm() {
     setLibrary(addBookToDataset(book, library));
   }
 
-  return (<div>
+  return (<div className={ style.addBookFormContainer }>
     <Formik
       initialValues={initalValues}
       onSubmit={(book, { setSubmitting, resetForm }) => {
@@ -168,7 +194,7 @@ export default function AddBookForm() {
       }}
     >
       {props => (
-        <form onSubmit={props.handleSubmit}>
+        <form onSubmit={props.handleSubmit} className={ style.addBookForm }>
           <BookTitleField
             handleChange={props.handleChange}
             title={props.values.title}
@@ -201,6 +227,10 @@ export default function AddBookForm() {
         )}
     </Formik>
     {/* The following must be present for the BarcodeReader component to anchor into. */}
-    <div id={BARCODE_CONTAINER_ID}></div>
+    <div className={style["barcode-modal"]} id="barcode-modal">
+      <div className={style["barcode-container"]} id="barcode-container">
+        <div id={BARCODE_VIEWER_ID} className={style["barcode-viewer"]}></div>
+      </div>
+    </div>
   </div>)
 }

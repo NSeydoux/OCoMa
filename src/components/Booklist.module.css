@@ -6,7 +6,14 @@
 .bookTable {
     border: solid black 1px ;
     margin: 1rem;
-    border-collapse: collapse;
+    border-spacing: 0;
+    /* Setting border-collapse to collapse prevents rounded corners.
+     * Setting border-spacing to 0 gets a similar result instead.
+     */
+    /* border-collapse: collapse; */
+    border-collapse: separate;
+    border-radius: 15px;
+    overflow: hidden;
 }
 
 .bookTable thead th {

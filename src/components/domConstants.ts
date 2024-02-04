@@ -1,1 +1,1 @@
-export const BARCODE_CONTAINER_ID = 'barcode-container';
+export const BARCODE_VIEWER_ID = 'barcode-viewer';
