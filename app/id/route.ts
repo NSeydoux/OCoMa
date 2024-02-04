@@ -1,5 +1,6 @@
 function buildClientIdentifierDoc() {
     const baseUrl = process.env.VERCEL_URL ?? "https://localhost:3000/";
+    console.log("Base URL: ", baseUrl);
     return {
       "@context": ["https://www.w3.org/ns/solid/oidc-context.jsonld"],
       client_id: new URL("/id", baseUrl).href,
