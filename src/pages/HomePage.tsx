@@ -24,7 +24,7 @@ export default function Home() {
   }, [libraryRoot, session, setLibrary])
 
   if (!session.info.isLoggedIn) {
-    return undefined;
+    return <></>;
   }
   return <ViewPage setLibraryRoot={setLibraryRoot} />
 }
