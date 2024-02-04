@@ -1,4 +1,4 @@
-export function buildClientIdentifierDoc() {
+function buildClientIdentifierDoc() {
     const baseUrl = process.env.VERCEL_URL ?? "https://localhost:3000/";
     return {
       "@context": ["https://www.w3.org/ns/solid/oidc-context.jsonld"],
