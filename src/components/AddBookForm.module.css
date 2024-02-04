@@ -24,6 +24,9 @@
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
   }
 
+  /* See the following link for ideas */
+  /* https://codepen.io/havardob/pen/eYJPwdb */
+
   .barcode-container {
     display: flex;
     justify-content: center;
@@ -36,11 +39,7 @@
   
   /* Modal Content/Box */
   .barcode-viewer {
-    /* background-color: #fefefe; */
-    /* margin: 15% auto; */
     padding: 1em;
-    /* border: 1px solid #888; */
-    /* width: 80%; */
   }
   
   /* The Close Button */
