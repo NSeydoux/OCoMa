@@ -12,11 +12,13 @@ const OPENID_PROVIDER = "https://login.inrupt.com";
 export default function LoginButton() {
   const { session } = useSession();
   const { deploymentUrl } = useContext(DeploymentContext);
-  console.log("Deployment URL: ", deploymentUrl);
     return <Button 
       onClick={
         async () => await session.login({
-          clientId: new URL("/id", deploymentUrl).href,
+          // Default to dynamic client registration when using a local deployment.
+          clientId: deploymentUrl?.includes("localhost") 
+            ? undefined
+            : new URL("/id", deploymentUrl).href,
           oidcIssuer: OPENID_PROVIDER,
           redirectUrl: deploymentUrl,
         })

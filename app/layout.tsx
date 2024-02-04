@@ -19,7 +19,10 @@ export default function RootLayout({
       <body>
         {/* The following is required to prevent custom CSS from being overriden. */}
         <StyledEngineProvider injectFirst>
-          <Layout>{children}</Layout>
+          {/* // NB: These props are resolved server-side, as this is a Server component. */}
+          <Layout deploymentUrl={process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000/"}>
+            {children}
+          </Layout>
         </StyledEngineProvider>
       </body>
     </html>
