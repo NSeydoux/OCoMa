@@ -1,14 +1,13 @@
 function buildClientIdentifierDoc() {
-    const baseUrl = `https://${process.env.VERCEL_URL}` ?? "http://localhost:3000/";
-    console.log("Base URL: ", baseUrl);
+    const baseUrl = `https://${process.env.VERCEL_URL}/` ?? "http://localhost:3000/";
     return {
       "@context": ["https://www.w3.org/ns/solid/oidc-context.jsonld"],
       client_id: new URL("/id", baseUrl).href,
       client_name: "OCoMa",
       // URLs the user will be redirected back to upon successful authentication:
-      redirect_uris: baseUrl,
+      redirect_uris: [baseUrl],
       // URLs the user can be redirected to back to upon successful logout:
-      post_logout_redirect_uris: baseUrl,
+      post_logout_redirect_uris: [baseUrl],
       // Support refresh_tokens for refreshing the session:
       grant_types: ["authorization_code", "refresh_token"],
       // The scope must be explicit, as the default doesn't include offline_access,
