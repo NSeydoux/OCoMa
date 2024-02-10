@@ -8,6 +8,40 @@
     border-radius: 1em;
     padding: 1em;
     margin: 1em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: min-content min-content min-content;
+}
+
+#bookTitleField {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+#langTagField {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+#authorField {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+#seriesField {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+}
+
+#isbnField {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+#submitButton {
+  grid-column: 1 / span 2;
+  grid-row: 4;
 }
 
  /* The Modal (background) */
